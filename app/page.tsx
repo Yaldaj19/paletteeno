@@ -166,7 +166,7 @@ export default function Home() {
   return (
     <div dir={t.dir}>
       {/* ===================== هیرو ===================== */}
-      <section id="top" className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4 pt-8 pb-14">
+      <section id="top" className="relative flex min-h-[72vh] items-center justify-center overflow-hidden px-4 pt-2 pb-12">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute -top-32 -right-32 h-[600px] w-[600px] blur-[80px] animate-[aurora1_12s_ease-in-out_infinite_alternate]"
                style={{ background: "radial-gradient(ellipse at center, #7C3AED88 0%, transparent 70%)" }} />
@@ -182,7 +182,7 @@ export default function Home() {
         <div className="relative z-10 mx-auto w-full max-w-4xl text-center">
           {/* لوگو بالای عنوان */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-paletteeno.webp" alt={t.brandDot} className="mx-auto mb-3 h-16 w-auto drop-shadow-[0_4px_24px_rgba(124,58,237,0.4)] md:h-24" />
+          <img src="/logo-paletteeno.webp" alt={t.brandDot} className="mx-auto mb-1 h-14 w-auto drop-shadow-[0_4px_24px_rgba(124,58,237,0.4)] md:h-20" />
 
           {/* h2: نام برند (وردمارک گرادیانتی) */}
           <h2 className="bg-[linear-gradient(135deg,#A78BFA_0%,#60A5FA_25%,#34D399_50%,#FBBF24_75%,#F472B6_100%)] bg-[length:300%_300%] bg-clip-text text-5xl font-black leading-tight text-transparent animate-[gradientShift_6s_ease_infinite] md:text-7xl">
@@ -397,13 +397,13 @@ export default function Home() {
 
         {/* دکمه‌ی تم روشن/دارک */}
         <button type="button" onClick={() => setTheme((th) => (th === "dark" ? "light" : "dark"))} aria-label="theme"
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-[#ffffff26] bg-[#14141F] text-xl shadow-lg transition hover:scale-105 active:scale-95">
+                className="flex h-14 w-14 items-center justify-center rounded-full border border-[#ffffff26] bg-[#14141F] text-xl shadow-lg transition hover:scale-105 active:scale-95">
           {theme === "dark" ? "☀️" : "🌙"}
         </button>
 
         {/* دکمه‌ی زبان (قرینه‌ی دکمه‌ی تم) */}
         <button type="button" onClick={() => setLang((l) => (l === "fa" ? "en" : "fa"))} aria-label="language"
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-[#ffffff26] bg-[#14141F] text-sm font-black text-white shadow-lg transition hover:scale-105 active:scale-95">
+                className="flex h-14 w-14 items-center justify-center rounded-full border border-[#ffffff26] bg-[#14141F] text-base font-black text-white shadow-lg transition hover:scale-105 active:scale-95">
           {lang === "fa" ? "EN" : "فا"}
         </button>
 

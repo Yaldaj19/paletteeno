@@ -41,8 +41,8 @@ export default function SuggestedSlider({ lang }: { lang: Lang }) {
   return (
     <section id="suggested" aria-label={t.suggestedTitle} className="scroll-mt-6 py-14">
       <h2 className="t-strong mb-7 px-4 text-center text-2xl font-black">{t.suggestedTitle}</h2>
-      <div className="marquee" style={{ ["--marquee-dur" as string]: "40s" }}>
-        <div className="marquee-track px-2">
+      <div className="marquee" style={{ ["--marquee-dur" as string]: "75s" }}>
+        <div className="marquee-track" dir="ltr">
           {loop.map((p, i) => <MarqueeCard key={i} p={p} />)}
         </div>
       </div>

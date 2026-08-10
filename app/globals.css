@@ -15,17 +15,29 @@
   --glass-brd: rgba(255, 255, 255, 0.12);
 }
 [data-theme="light"] {
-  --page: #EEF0F8;
-  --fg: #16121F;
-  --fg-soft: rgba(22, 18, 31, 0.62);
-  --fg-faint: rgba(22, 18, 31, 0.42);
-  --glass: rgba(22, 18, 31, 0.05);
-  --glass-2: rgba(22, 18, 31, 0.04);
-  --glass-brd: rgba(22, 18, 31, 0.12);
+  --page: #D4D7E3;
+  --fg: #14121C;
+  --fg-soft: rgba(20, 18, 28, 0.66);
+  --fg-faint: rgba(20, 18, 28, 0.45);
+  --glass: rgba(20, 18, 28, 0.06);
+  --glass-2: rgba(20, 18, 28, 0.045);
+  --glass-brd: rgba(20, 18, 28, 0.14);
 }
 
-html { font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif; }
-body { background: var(--page); color: var(--fg); transition: background .3s ease, color .3s ease; }
+html {
+  font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+body {
+  background: var(--page);
+  color: var(--fg);
+  line-height: 1.75;
+  letter-spacing: -0.003em;
+  transition: background .3s ease, color .3s ease;
+}
+h1, h2, h3 { letter-spacing: -0.01em; }
 
 /* کلاس‌های تم‌آگاه */
 .t-strong { color: var(--fg); }
@@ -56,8 +68,8 @@ input::placeholder, textarea::placeholder { color: var(--fg-faint); opacity: 1; 
 .marquee-track {
   display: flex;
   width: max-content;
-  gap: 1rem;
-  animation: marqueeMove var(--marquee-dur, 55s) linear infinite;
+  /* بدون gap؛ فاصله از margin کارت‌ها می‌آید تا حلقه بی‌پرش باشد */
+  animation: marqueeMove var(--marquee-dur, 70s) linear infinite;
 }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 
