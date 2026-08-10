@@ -63,15 +63,22 @@ input::placeholder, textarea::placeholder { color: var(--fg-faint); opacity: 1; 
 @keyframes haloPulse { 0%,100% { opacity:.35; transform:scale(1); } 50% { opacity:.7; transform:scale(1.2); } }
 
 /* ---------- اسلایدر پیشنهادی (marquee) ---------- */
-@keyframes marqueeMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.marquee { overflow: hidden; }
-.marquee-track {
+/* اسلایدر بی‌پرش: دو گروهِ کاملِ یکسان، هرکدام به اندازه‌ی خودش + gap جابه‌جا می‌شود. */
+@keyframes marqueeMove { to { transform: translateX(calc(-100% - var(--mq-gap))); } }
+.marquee {
+  --mq-gap: 1rem;
   display: flex;
-  width: max-content;
-  /* بدون gap؛ فاصله از margin کارت‌ها می‌آید تا حلقه بی‌پرش باشد */
-  animation: marqueeMove var(--marquee-dur, 70s) linear infinite;
+  gap: var(--mq-gap);
+  overflow: hidden;
 }
-.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-group {
+  display: flex;
+  gap: var(--mq-gap);
+  flex-shrink: 0;
+  min-width: max-content;
+  animation: marqueeMove var(--marquee-dur, 75s) linear infinite;
+}
+.marquee:hover .marquee-group { animation-play-state: paused; }
 
 .noise-layer {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");

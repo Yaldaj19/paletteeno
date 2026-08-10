@@ -37,14 +37,16 @@ export default function SuggestedSlider({ lang }: { lang: Lang }) {
 
   const palettes = weeklySuggestions(bases, lang);
   if (!palettes.length) return null;
-  const loop = [...palettes, ...palettes];
 
   return (
     <section id="suggested" aria-label={t.suggestedTitle} className="scroll-mt-6 py-14">
       <h2 className="t-strong mb-7 px-4 text-center text-2xl font-black">{t.suggestedTitle}</h2>
-      <div className="marquee" style={{ ["--marquee-dur" as string]: "75s" }}>
-        <div className="marquee-track" dir="ltr">
-          {loop.map((p, i) => <MarqueeCard key={i} p={p} />)}
+      <div className="marquee" dir="ltr" style={{ ["--marquee-dur" as string]: "75s" }}>
+        <div className="marquee-group">
+          {palettes.map((p, i) => <MarqueeCard key={"a" + i} p={p} />)}
+        </div>
+        <div className="marquee-group" aria-hidden="true">
+          {palettes.map((p, i) => <MarqueeCard key={"b" + i} p={p} />)}
         </div>
       </div>
     </section>

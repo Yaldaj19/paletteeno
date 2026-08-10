@@ -1,3 +1,3 @@
-:HL["/_next/static/chunks/3qza0m6eex638.css","style"]
+:HL["/_next/static/chunks/0g796hf7d24g5.css","style"]
 :HL["https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"dSaxrAhQg17XMcsaA3Vyj"}
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"8R-aWLdouQBRvgE5ELJXD"}

@@ -14,7 +14,7 @@ export default function MarqueeCard({ p }: { p: RenderPalette }) {
   };
 
   return (
-    <div className="mr-4 w-56 shrink-0 overflow-hidden rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.28)] ring-1 ring-black/5" dir="ltr">
+    <div className="w-56 shrink-0 overflow-hidden rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.28)] ring-1 ring-black/5" dir="ltr">
       <div className="px-3 py-2.5 text-white" style={{ background: `linear-gradient(135deg, ${r.bannerFrom}, ${r.bannerTo})` }}>
         <div className="text-[13px] font-bold" dir="auto">{p.name}</div>
         <div className="mt-0.5 text-[10px] opacity-80">{p.dark ? "Dark" : "Light"}</div>
