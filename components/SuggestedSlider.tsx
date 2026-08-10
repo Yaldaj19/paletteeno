@@ -12,15 +12,16 @@ const POOL = [
   "#0F766E", "#1E3A8A", "#B45309", "#A47864", "#E11D48", "#0D9488",
 ];
 const WEEK = 7 * 24 * 3600 * 1000;
+// ست پیش‌فرضِ قطعی — همان اولِ رندر (SSR) نمایش داده می‌شود تا اسلایدر خالی نباشد.
+const DEFAULT_BASES = POOL.slice(0, 12);
 
 function pickBases(): string[] {
-  const p = [...POOL].sort(() => Math.random() - 0.5).slice(0, 12);
-  return p;
+  return [...POOL].sort(() => Math.random() - 0.5).slice(0, 12);
 }
 
 export default function SuggestedSlider({ lang }: { lang: Lang }) {
   const t = getDict(lang);
-  const [bases, setBases] = useState<string[] | null>(null);
+  const [bases, setBases] = useState<string[]>(DEFAULT_BASES);
 
   useEffect(() => {
     let stored: { ts: number; bases: string[] } | null = null;
@@ -34,7 +35,7 @@ export default function SuggestedSlider({ lang }: { lang: Lang }) {
     }
   }, []);
 
-  const palettes = bases ? weeklySuggestions(bases, lang) : [];
+  const palettes = weeklySuggestions(bases, lang);
   if (!palettes.length) return null;
   const loop = [...palettes, ...palettes];
 
