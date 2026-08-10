@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# استودیو پالت رنگی (Palette Studio)
 
-## Getting Started
+ابزار ساخت پالت رنگی حرفه‌ای. کاربر یک **اسم رنگ** می‌گوید (مثل «سبز لوکس»)، یا با **color picker** رنگ انتخاب می‌کند، می‌تواند **توضیحات** بدهد و حتی **آدرس یک سایت** بدهد تا از حال‌وهوای آن الهام گرفته شود. سیستم حداقل **۶ پالت** با پیش‌نمایش زنده (هدر، دکمه، کارت، چیپ) می‌سازد.
 
-First, run the development server:
+## معماری ترکیبی (Hybrid)
+- **موتور الگوریتمی** (`lib/generate.ts` + `lib/colors.ts`): از یک رنگ پایه با تئوری رنگ (مونوکروم/مکمل/آنالوگ/اسپلیت/تریادیک/دارک‌لوکس) ۶ پالت می‌سازد. آنی، آفلاین، بدون هزینه.
+- **موتور هوش مصنوعی** (`lib/openrouter.ts`): وقتی **توضیحات** یا **آدرس سایت** داده شود و کلید OpenRouter موجود باشد، پالت‌های هوشمندتر می‌سازد. اگر رنگ مشخصی داده شده باشد، **Hue قفل می‌شود** تا خروجی از خانواده‌ی همان رنگ خارج نشود.
+- **آنالیز سایت** (`lib/site.ts`): HTML و CSS سایت را می‌گیرد، رنگ‌های غالب و متادیتا را استخراج می‌کند.
+- `normalize()` در `lib/colors.ts` هسته‌ی هر پالت (چه AI چه الگوریتمی) را به یک **استایل رندرِ واحد** تبدیل می‌کند، با رعایت کنتراست WCAG برای متن/لینک.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## اجرا
 ```
+pnpm install
+pnpm dev
+```
+پیش‌فرض روی `http://localhost:3000` (اینجا با `PORT=3210` اجرا شده).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## کلید هوش مصنوعی (اختیاری)
+در `.env.local`:
+```
+OPENROUTER_API_KEY=کلید_تو
+OPENROUTER_MODEL=google/gemini-2.5-flash
+```
+> بدون کلید هم برنامه کامل کار می‌کند و از موتور الگوریتمی استفاده می‌کند.
+> برای پایداریِ مسیر AI معمولاً به VPN نیاز است (دسترسی به OpenRouter).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ساختار
+```
+app/
+  page.tsx              فرم ورودی + نمایش کارت‌ها
+  layout.tsx            RTL / فارسی
+  api/generate/route.ts هسته‌ی ترکیبی (الگوریتمی + AI + آنالیز سایت)
+components/
+  PaletteCard.tsx       کارت پالت با پیش‌نمایش قالب + کپی hex
+lib/
+  colors.ts             ریاضیات رنگ، کنتراست WCAG، normalize
+  dictionary.ts         دیکشنری اسم رنگ فارسی/انگلیسی + پارسر
+  generate.ts           استراتژی‌های هارمونی
+  openrouter.ts         لایه‌ی AI (با قفل Hue و retry)
+  site.ts               آنالیز و استخراج رنگ سایت
+```
