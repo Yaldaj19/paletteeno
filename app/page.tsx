@@ -4,6 +4,7 @@ import type { RenderPalette } from "@/lib/colors";
 import PaletteCard from "@/components/PaletteCard";
 import { TOPICS, sampleFor, labelFor, type TopicSample } from "@/lib/topics";
 import { getDict, type Lang } from "@/lib/i18n";
+import { localGenerate } from "@/lib/engine";
 
 const MODERN_BASES = ["#7C3AED", "#0EA5E9", "#F43F5E", "#10B981", "#F59E0B", "#6366F1", "#EC4899", "#14B8A6", "#A47864", "#8B5CF6", "#0D9488", "#E11D48", "#DB2777", "#22C55E", "#F97316"];
 
@@ -11,8 +12,6 @@ interface Batch {
   id: number;
   title: string;
   engine: string;
-  note?: string;
-  site?: { ok: boolean; title: string; colors: string[]; error?: string } | null;
   palettes: RenderPalette[];
   startNumber: number;
   samples: TopicSample[];
@@ -29,7 +28,6 @@ export default function Home() {
   const [useHex, setUseHex] = useState(false);
   const [description, setDescription] = useState("");
   const [topicKeys, setTopicKeys] = useState<string[]>([]);
-  const [urls, setUrls] = useState<string[]>([""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -83,21 +81,15 @@ export default function Home() {
     return { primary: p.scale["500"], accent: p.accent };
   };
 
-  async function runGenerate(payload: Record<string, unknown>, title: string, onErr: (m: string) => void, setBusy: (b: boolean) => void) {
+  function runGenerate(payload: Record<string, unknown>, title: string, onErr: (m: string) => void, setBusy: (b: boolean) => void) {
     setBusy(true);
     try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...payload, startIndex: total, lang }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Error");
+      const data = localGenerate({ ...payload, startIndex: total }, lang);
       const id = batchSeq + 1;
       setBatchSeq(id);
       setBatches((prev) => [
         ...prev,
-        { id, title, engine: data.engine, note: data.note, site: data.site, palettes: data.palettes || [], startNumber: prev.reduce((s, b) => s + b.palettes.length, 0), samples: currentSamples, lang },
+        { id, title, engine: data.engine, palettes: data.palettes, startNumber: prev.reduce((s, b) => s + b.palettes.length, 0), samples: currentSamples, lang },
       ]);
     } catch (e) {
       onErr(e instanceof Error ? e.message : "Error");
@@ -113,10 +105,9 @@ export default function Home() {
   function generate() {
     setError("");
     const colorValue = useHex ? hex : colorInput.trim();
-    const cleanUrls = urls.map((u) => u.trim()).filter(Boolean);
-    if (!colorValue && !description.trim() && !topicLabels && !cleanUrls.length) { setError(t.errNeed); return; }
-    const title = colorValue ? t.titleColor(colorValue) : topicLabels ? t.titleTopic(topicLabels) : description.trim() ? t.titleByDesc : t.titleBySite;
-    runGenerate({ colorInput: colorValue, description: effectiveDesc(), urls: cleanUrls, mode: "fresh" }, title, setError, setLoading);
+    if (!colorValue && !description.trim() && !topicLabels) { setError(t.errNeed); return; }
+    const title = colorValue ? t.titleColor(colorValue) : topicLabels ? t.titleTopic(topicLabels) : t.titleByDesc;
+    runGenerate({ colorInput: colorValue, description: effectiveDesc(), mode: "fresh" }, title, setError, setLoading);
   }
 
   function doNewPalettes() {
@@ -158,10 +149,6 @@ export default function Home() {
     if (n && n >= 1 && n <= total && !combineNums.includes(n)) setCombineNums((p) => [...p, n]);
     setCombineInput("");
   }
-
-  const setUrl = (i: number, v: string) => setUrls((p) => p.map((u, idx) => (idx === i ? v : u)));
-  const addUrl = () => setUrls((p) => [...p, ""]);
-  const removeUrl = (i: number) => setUrls((p) => (p.length > 1 ? p.filter((_, idx) => idx !== i) : p));
 
   const hasColor = useHex || colorInput.trim().length > 0;
   const floatSide = lang === "en" ? "left-6 items-start" : "right-6 items-end";
@@ -262,25 +249,6 @@ export default function Home() {
               )}
             </div>
 
-            {/* آدرس سایت‌ها */}
-            <div className={`mt-4 ${t.dir === "rtl" ? "text-right" : "text-left"}`}>
-              <p className="mb-2 text-xs text-white/45">{t.urlLabel}</p>
-              <div className="space-y-2">
-                {urls.map((u, i) => (
-                  <div key={i} className="flex gap-2">
-                    <input value={u} onChange={(e) => setUrl(i, e.target.value)} dir="ltr" placeholder="https://example.com"
-                           className="flex-1 rounded-xl border border-white/10 bg-white/6 px-4 py-2.5 text-sm text-white placeholder:text-white/25 outline-none focus:border-cyan-500/40 focus:ring-2 focus:ring-cyan-500/40" />
-                    {urls.length > 1 && (
-                      <button type="button" onClick={() => removeUrl(i)} className="rounded-lg bg-white/8 px-3 text-white/60 transition hover:text-white">×</button>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {urls.length < 3 && (
-                <button type="button" onClick={addUrl} className="mt-2 text-xs font-semibold text-cyan-300 hover:underline">{t.addUrl}</button>
-              )}
-            </div>
-
             {error && <p className="mt-3 rounded-lg bg-rose-500/15 px-3 py-2 text-sm text-rose-300">{error}</p>}
 
             <button type="button" onClick={generate} disabled={loading}
@@ -299,10 +267,6 @@ export default function Home() {
               <div className="mb-5 flex flex-wrap items-center gap-3 border-b border-white/10 pb-3">
                 <h2 className="text-lg font-black text-white">{b.title}</h2>
                 <span className="text-[11px] text-white/40" dir="ltr">#{b.startNumber + 1}–#{b.startNumber + b.palettes.length}</span>
-                {b.site?.ok && b.site.colors.length > 0 && (
-                  <span className="text-[11px] text-white/40" dir="ltr">{t.siteLabel}: {b.site.colors.slice(0, 4).join(" · ")}</span>
-                )}
-                {b.note && <span className="text-[11px] text-amber-300/80">{b.note}</span>}
               </div>
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {b.palettes.map((p, i) => (

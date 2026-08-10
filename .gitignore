@@ -15,7 +15,7 @@
 
 # next.js
 /.next/
-/out/
+# نکته: پوشه‌ی out/ (خروجی static export) عمداً کامیت می‌شود تا هاست فقط با git pull بگیرد.
 
 # production
 /build

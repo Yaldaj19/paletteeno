@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // مخفی‌کردن نشانگر Dev Tools نکست (آیکن N گوشه‌ی صفحه در حالت توسعه)
+  // خروجی استاتیک برای استقرار روی هر هاست (بدون نیاز به Node) — پوشه‌ی out/
+  output: "export",
+  images: { unoptimized: true },
+  trailingSlash: true,
+  // مخفی‌کردن نشانگر Dev Tools نکست (آیکن N در حالت توسعه)
   devIndicators: false,
 };
 
