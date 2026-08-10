@@ -114,6 +114,20 @@ export function topicPalettes(bases: string[], lang: Lang = "fa"): CorePalette[]
   return out;
 }
 
+/** برای اسلایدر پیشنهادی: از هر رنگ پایه، یک پالت روشن و یک دارک با اکسنت مکمل. */
+export function suggestionCores(bases: string[], lang: Lang = "fa"): CorePalette[] {
+  const t = (fa: string, en: string) => (lang === "en" ? en : fa);
+  const out: CorePalette[] = [];
+  for (const raw of bases) {
+    const b = hexToHsl(toBrandTone(raw));
+    const light = hslToHex({ h: b.h, s: clamp(b.s, 46, 90), l: clamp(b.l, 40, 56) });
+    const dark = hslToHex({ h: b.h, s: clamp(b.s, 32, 78), l: 45 });
+    out.push(core(t("پالت روشن", "Light palette"), t("پیشنهادی و آماده", "Ready-made suggestion"), "suggest", light, accentFromHue(b.h + 180), false));
+    out.push(core(t("پالت دارک", "Dark palette"), t("پیشنهادی و آماده", "Ready-made suggestion"), "suggest", dark, accentFromHue(b.h + 180, 66, 56), true));
+  }
+  return out;
+}
+
 /** تضمین دقیقاً ۳ روشن + ۳ دارک از هر لیستی. */
 export function coerceLightDark(cores: CorePalette[]): CorePalette[] {
   const lights = cores.filter((c) => !c.dark);

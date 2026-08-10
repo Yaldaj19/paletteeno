@@ -1,9 +1,14 @@
 // موتور تولید سمت‌کلاینت (برای نسخه‌ی static export).
 // همان منطق الگوریتمی است؛ بدون AI و بدون آنالیز سایت (که به سرور نیاز دارند).
 import { CorePalette, normalizeAll, RenderPalette } from "./colors";
-import { algorithmicPalettes, generateFromInput, variationsFrom, combineFrom, topicPalettes, coerceLightDark } from "./generate";
+import { algorithmicPalettes, generateFromInput, variationsFrom, combineFrom, topicPalettes, suggestionCores, coerceLightDark } from "./generate";
 import { parseColorInput } from "./dictionary";
 import type { Lang } from "./i18n";
+
+/** اسلایدر پیشنهادی: از N رنگ پایه، ۲N پالت (هرکدام روشن+دارک). */
+export function weeklySuggestions(bases: string[], lang: Lang): RenderPalette[] {
+  return normalizeAll(suggestionCores(bases, lang));
+}
 
 export interface GenParams {
   colorInput?: string;

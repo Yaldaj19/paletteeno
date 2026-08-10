@@ -44,7 +44,7 @@ export default function PaletteCard({ p, number, sample, lang = "fa" }: { p: Ren
       <div className="overflow-hidden rounded-xl">
         <div className="px-4 pb-4 pt-4 text-white"
              style={{ background: `linear-gradient(135deg, ${r.bannerFrom}, ${r.bannerTo})` }}>
-          <h2 className="text-[17px] font-extrabold">{p.name}</h2>
+          <div className="text-[17px] font-extrabold">{p.name}</div>
           <p className="mt-0.5 text-xs opacity-85">{p.subtitle}</p>
         </div>
 
@@ -74,7 +74,7 @@ export default function PaletteCard({ p, number, sample, lang = "fa" }: { p: Ren
           </div>
 
           <div className="rounded-xl border p-3.5" style={{ background: r.innerBg, borderColor: r.innerBorder }}>
-            <h3 className="text-sm font-bold" style={{ color: r.heading }}>{sm.title}</h3>
+            <div className="text-sm font-bold" style={{ color: r.heading }}>{sm.title}</div>
             <p className="mt-1 text-xs" style={{ color: r.body }}>
               {sm.body}{" "}
               <a className="font-semibold" style={{ color: r.link }}>{t.more}</a>

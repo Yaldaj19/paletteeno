@@ -37,6 +37,7 @@ export interface Dict {
   navRefine: string;
   footerCredit: string;
   rights: string;
+  suggestedTitle: string;
   // کارت
   cardNav: [string, string, string];
   cardBrand: string;
@@ -112,6 +113,7 @@ const fa: Dict = {
   navRefine: "بازآفرینی و ترکیب ↺",
   footerCredit: "طراحی و توسعه توسط",
   rights: "پالتینو — تمامی حقوق محفوظ است.",
+  suggestedTitle: "پلت‌های پیشنهادی",
   cardNav: ["عنوان", "عنوان دوم", "عنوان سوم"],
   cardBrand: "عنوان",
   cardTitle: "عنوان مطلب نمونه",
@@ -185,6 +187,7 @@ const en: Dict = {
   navRefine: "Regenerate & Combine ↺",
   footerCredit: "Designed & developed by",
   rights: "Palettino — All rights reserved.",
+  suggestedTitle: "Suggested palettes",
   cardNav: ["Title", "Second title", "Third title"],
   cardBrand: "Brand",
   cardTitle: "Sample article title",
