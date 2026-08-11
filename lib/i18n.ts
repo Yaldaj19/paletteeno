@@ -8,6 +8,9 @@ export interface Dict {
   heroTagline: string;
   tabName: string;
   tabPick: string;
+  tabSolid: string;
+  tabGradient: string;
+  angleLabel: string;
   namePlaceholder: string;
   pickBaseHint: string;
   suggestions: string[];
@@ -84,6 +87,9 @@ const fa: Dict = {
   heroTagline: "از یک رنگ، اسم یا موضوع شروع کن؛ شش پالتِ هماهنگ با رنگ‌های مکمل تحویل بگیر — سه روشن و سه دارک، هماهنگ با استانداردهای طراحی و آماده‌ی پیاده‌سازی.",
   tabName: "اسم رنگ بگو",
   tabPick: "رنگ انتخاب کن",
+  tabSolid: "رنگ ساده",
+  tabGradient: "گرادینت",
+  angleLabel: "زاویه‌ی گرادینت",
   namePlaceholder: "مثلاً: بنفش سلطنتی، آبی نفتی، #7C3AED…",
   pickBaseHint: "رنگ پایه را انتخاب کن",
   suggestions: ["سبز لوکس", "آبی نفتی", "بنفش سلطنتی", "زمردی", "نارنجی گرم", "طلایی", "سرمه‌ای", "صورتی مدرن", "موکا موس", "کورال", "نعنایی", "ایندیگو", "هلویی", "خردلی", "سایان", "روبی"],
@@ -158,6 +164,9 @@ const en: Dict = {
   heroTagline: "Start from a color, a name or a topic and get six coordinated palettes with complementary colors — three light and three dark, on-standard and ready to ship.",
   tabName: "Say a color",
   tabPick: "Pick a color",
+  tabSolid: "Solid",
+  tabGradient: "Gradient",
+  angleLabel: "Gradient angle",
   namePlaceholder: "e.g. Royal purple, Petrol blue, #7C3AED…",
   pickBaseHint: "Pick a base color",
   suggestions: ["Luxe green", "Petrol blue", "Royal purple", "Emerald", "Warm orange", "Gold", "Navy", "Modern pink", "Mocha mousse", "Coral", "Mint", "Indigo", "Peach", "Mustard", "Cyan", "Ruby"],

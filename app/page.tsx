@@ -5,6 +5,9 @@ import PaletteCard from "@/components/PaletteCard";
 import { TOPICS, sampleFor, labelFor } from "@/lib/topics";
 import { getDict, type Lang } from "@/lib/i18n";
 import { localGenerate } from "@/lib/engine";
+import { parseColorInput } from "@/lib/dictionary";
+import { gradientsFrom, type GradientDef } from "@/lib/gradients";
+import GradientCard from "@/components/GradientCard";
 import SuggestedSlider from "@/components/SuggestedSlider";
 
 type Theme = "dark" | "light";
@@ -23,11 +26,15 @@ type TitleSpec =
 interface Batch {
   id: number;
   titleSpec: TitleSpec;
+  kind: "palette" | "gradient";
   engine: string;
   palettes: RenderPalette[];
+  gradients?: GradientDef[];
   startNumber: number;
   topicKeys: string[];
 }
+
+const GRAD_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315];
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("fa");
@@ -35,6 +42,8 @@ export default function Home() {
   const t = getDict(lang);
 
   // فرم اصلی
+  const [colorMode, setColorMode] = useState<"solid" | "gradient">("solid");
+  const [gradAngle, setGradAngle] = useState(135);
   const [colorInput, setColorInput] = useState("");
   const [hex, setHex] = useState("#7C3AED");
   const [useHex, setUseHex] = useState(false);
@@ -127,12 +136,40 @@ export default function Home() {
       setBatchSeq(id);
       setBatches((prev) => [
         ...prev,
-        { id, titleSpec, engine: data.engine, palettes: data.palettes, startNumber: prev.reduce((s, b) => s + b.palettes.length, 0), topicKeys: [...topicKeys] },
+        { id, titleSpec, kind: "palette", engine: data.engine, palettes: data.palettes, startNumber: prev.reduce((s, b) => s + b.palettes.length, 0), topicKeys: [...topicKeys] },
       ]);
     } catch (e) {
       onErr(e instanceof Error ? e.message : "Error");
     } finally {
       setBusy(false);
+    }
+  }
+
+  // رنگِ پایه را از ورودی‌های فعلی استخراج می‌کند (برای حالتِ گرادینت).
+  function resolveBaseHex(): string {
+    if (useHex) return hex;
+    const ci = colorInput.trim();
+    if (ci) return parseColorInput(ci).base;
+    const topicColors = [...new Set(topicKeys.flatMap((k) => TOPICS.find((tt) => tt.key === k)?.colors ?? []))];
+    if (topicColors.length) return topicColors[0];
+    return parseColorInput(description.trim() || "#7C3AED").base;
+  }
+
+  // ساختِ یک دسته‌ی گرادینتِ هارمونیک از رنگِ پایه.
+  function runGradients(titleSpec: TitleSpec) {
+    setLoading(true);
+    try {
+      const gradients = gradientsFrom(resolveBaseHex());
+      const id = batchSeq + 1;
+      setBatchSeq(id);
+      setBatches((prev) => [
+        ...prev,
+        { id, titleSpec, kind: "gradient", engine: "gradient", palettes: [], gradients, startNumber: 0, topicKeys: [...topicKeys] },
+      ]);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -145,6 +182,7 @@ export default function Home() {
     const colorValue = useHex ? hex : colorInput.trim();
     if (!colorValue && !description.trim() && !topicLabels) { setError(t.errNeed); return; }
     const spec: TitleSpec = colorValue ? { kind: "color", value: colorValue } : topicKeys.length ? { kind: "topic", keys: [...topicKeys] } : { kind: "desc" };
+    if (colorMode === "gradient") { runGradients(spec); return; }
     runGenerate({ colorInput: colorValue, description: effectiveDesc(), mode: "fresh" }, spec, setError, setLoading);
   }
 
@@ -225,6 +263,18 @@ export default function Home() {
 
           {/* فرم شیشه‌ای */}
           <div className={`t-glass mt-9 rounded-3xl border p-5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] backdrop-blur-[20px] md:p-6 ${t.dir === "rtl" ? "text-right" : "text-left"}`}>
+            {/* انتخابِ خروجی: رنگِ ساده یا گرادینت */}
+            <div className="mb-3 flex items-center gap-2 rounded-xl t-glass2 p-1 text-sm">
+              <button type="button" onClick={() => setColorMode("solid")}
+                      className={`flex-1 rounded-lg py-1.5 font-bold transition ${colorMode === "solid" ? "bg-violet-600 text-white" : "t-soft hover:t-strong"}`}>
+                {t.tabSolid}
+              </button>
+              <button type="button" onClick={() => setColorMode("gradient")}
+                      className={`flex-1 rounded-lg py-1.5 font-bold transition ${colorMode === "gradient" ? "bg-violet-600 text-white" : "t-soft hover:t-strong"}`}>
+                {t.tabGradient}
+              </button>
+            </div>
+
             <div className="mb-4 flex items-center gap-2 text-sm">
               <button type="button" onClick={() => setUseHex(false)}
                       className={`rounded-lg px-3 py-1.5 font-bold transition ${!useHex ? "bg-violet-600 text-white" : "t-glass t-soft hover:t-strong"}`}>
@@ -290,6 +340,21 @@ export default function Home() {
               )}
             </div>
 
+            {/* انتخابِ زاویه‌ی گرادینت — روی همه‌ی کارت‌های گرادینت به‌صورت زنده اثر می‌گذارد */}
+            {colorMode === "gradient" && (
+              <div className="mt-3 rounded-xl border t-brd t-glass2 p-3">
+                <p className="mb-2 text-xs t-soft">{t.angleLabel}: <span dir="ltr" className="font-mono">{gradAngle}°</span></p>
+                <div className="flex flex-wrap gap-1.5" dir="ltr">
+                  {GRAD_ANGLES.map((a) => (
+                    <button key={a} type="button" onClick={() => setGradAngle(a)}
+                            className={`rounded-lg border px-2.5 py-1 font-mono text-xs font-bold transition ${gradAngle === a ? "border-violet-500 bg-violet-600 text-white" : "t-brd t-glass2 t-soft hover:t-strong"}`}>
+                      {a}°
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {error && <p className="mt-3 rounded-lg bg-rose-500/15 px-3 py-2 text-sm text-rose-300">{error}</p>}
 
             <button type="button" onClick={generate} disabled={loading}
@@ -309,12 +374,21 @@ export default function Home() {
             <div key={b.id} id={`batch-${b.id}`} className="mb-12 scroll-mt-6">
               <div className="mb-5 flex flex-wrap items-center gap-3 border-b t-brd pb-3">
                 <h2 className="text-lg font-black t-strong">{titleText(b.titleSpec)}</h2>
-                <span className="text-[11px] t-soft" dir="ltr">#{b.startNumber + 1}–#{b.startNumber + b.palettes.length}</span>
+                {b.kind === "gradient" && (
+                  <span className="rounded-full bg-violet-500/20 px-2 py-0.5 text-[11px] font-bold text-violet-200">{t.tabGradient}</span>
+                )}
+                <span className="text-[11px] t-soft" dir="ltr">
+                  {b.kind === "gradient" ? `${b.gradients?.length ?? 0}×` : `#${b.startNumber + 1}–#${b.startNumber + b.palettes.length}`}
+                </span>
               </div>
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {b.palettes.map((p, i) => (
-                  <PaletteCard key={b.id + "-" + i} p={p} number={b.startNumber + i + 1} sample={bSamples[i % bSamples.length]} lang={lang} />
-                ))}
+                {b.kind === "gradient"
+                  ? b.gradients!.map((g, i) => (
+                      <GradientCard key={b.id + "-g-" + i} g={g} angle={gradAngle} lang={lang} />
+                    ))
+                  : b.palettes.map((p, i) => (
+                      <PaletteCard key={b.id + "-" + i} p={p} number={b.startNumber + i + 1} sample={bSamples[i % bSamples.length]} lang={lang} />
+                    ))}
               </div>
             </div>
             );
