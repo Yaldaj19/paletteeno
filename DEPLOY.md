@@ -35,26 +35,22 @@ git push origin main
 
 ## ۲) روی هاست (فقط pull + کپی)
 
-بارِ اول (clone):
-
-```
-git clone https://github.com/Yaldaj19/paletteeno.git paletteeno-src
-```
+repo داخلِ خودِ docroot ساب‌دامین clone شده (`~/paletteeno.yaldajahanshahi.ir/paletteeno`) و docroot واقعی، پوشه‌ی **والدِ** آن است.
 
 دفعات بعد (به‌روزرسانی):
 
 ```
-cd ~/paletteeno-src
+cd ~/paletteeno.yaldajahanshahi.ir/paletteeno
 ```
 ```
 git pull origin main
 ```
 ```
-cp -Rf out/. ~/paletteeno.yaldajahanshahi.ir/
+cp -Rf out/. ../
 ```
 
-> مسیر مقصد را با **document root واقعیِ ساب‌دامین** جایگزین کن (معمولاً `~/paletteeno.yaldajahanshahi.ir/` یا داخل `public_html/paletteeno/`).
-> اگر می‌خواهی repo مستقیماً داخل docroot باشد، به‌جای کپی، docroot را روی همان مسیرِ `out/` تنظیم کن.
+> `../` یعنی محتوای `out/` داخلِ docroot واقعی (`~/paletteeno.yaldajahanshahi.ir/`) کپی می‌شود.
+> چون asset ها مسیر **نسبی** دارند (`assetPrefix: "."`), build هم روی ریشه و هم روی زیرمسیر درست بارگذاری می‌شود.
 
 ---
 
