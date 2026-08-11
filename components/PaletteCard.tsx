@@ -44,8 +44,8 @@ export default function PaletteCard({ p, number, sample, lang = "fa" }: { p: Ren
       <div className="overflow-hidden rounded-xl">
         <div className="px-4 pb-4 pt-4 text-white"
              style={{ background: `linear-gradient(135deg, ${r.bannerFrom}, ${r.bannerTo})` }}>
-          <div className="text-[17px] font-extrabold">{p.name}</div>
-          <p className="mt-0.5 text-xs opacity-85">{p.subtitle}</p>
+          <div className="text-[17px] font-extrabold">{p.name[lang]}</div>
+          <p className="mt-0.5 text-xs opacity-85">{p.subtitle[lang]}</p>
         </div>
 
         <div className="flex h-11">

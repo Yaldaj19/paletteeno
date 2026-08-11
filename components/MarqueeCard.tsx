@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import type { RenderPalette } from "@/lib/colors";
+import type { Lang } from "@/lib/i18n";
 
 // کارت فشرده‌ی اسلایدر با کدهای رنگیِ قابل‌کپی. margin راست برای حلقه‌ی بی‌پرش.
-export default function MarqueeCard({ p }: { p: RenderPalette }) {
+export default function MarqueeCard({ p, lang = "fa" }: { p: RenderPalette; lang?: Lang }) {
   const r = p.render;
   const [copied, setCopied] = useState<string | null>(null);
   const copy = (hex: string) => {
@@ -16,7 +17,7 @@ export default function MarqueeCard({ p }: { p: RenderPalette }) {
   return (
     <div className="w-56 shrink-0 overflow-hidden rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.28)] ring-1 ring-black/5" dir="ltr">
       <div className="px-3 py-2.5 text-white" style={{ background: `linear-gradient(135deg, ${r.bannerFrom}, ${r.bannerTo})` }}>
-        <div className="text-[13px] font-bold" dir="auto">{p.name}</div>
+        <div className="text-[13px] font-bold" dir="auto">{p.name[lang]}</div>
         <div className="mt-0.5 text-[10px] opacity-80">{p.dark ? "Dark" : "Light"}</div>
       </div>
 

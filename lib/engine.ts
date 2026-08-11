@@ -3,11 +3,10 @@
 import { CorePalette, normalizeAll, RenderPalette } from "./colors";
 import { algorithmicPalettes, generateFromInput, variationsFrom, combineFrom, topicPalettes, suggestionCores, coerceLightDark } from "./generate";
 import { parseColorInput } from "./dictionary";
-import type { Lang } from "./i18n";
 
 /** اسلایدر پیشنهادی: از N رنگ پایه، ۲N پالت (هرکدام روشن+دارک). */
-export function weeklySuggestions(bases: string[], lang: Lang): RenderPalette[] {
-  return normalizeAll(suggestionCores(bases, lang));
+export function weeklySuggestions(bases: string[]): RenderPalette[] {
+  return normalizeAll(suggestionCores(bases));
 }
 
 export interface GenParams {
@@ -19,20 +18,20 @@ export interface GenParams {
   startIndex?: number;
 }
 
-export function localGenerate(p: GenParams, lang: Lang): { engine: string; palettes: RenderPalette[] } {
+export function localGenerate(p: GenParams): { engine: string; palettes: RenderPalette[] } {
   const mode = p.mode || "fresh";
   let cores: CorePalette[] = [];
 
   if (mode === "variations" && p.seeds?.length) {
-    cores = variationsFrom(p.seeds[0].primary, p.seeds[0].accent, lang);
+    cores = variationsFrom(p.seeds[0].primary, p.seeds[0].accent);
   } else if (mode === "topic") {
-    cores = topicPalettes(p.topicColors || [], lang);
+    cores = topicPalettes(p.topicColors || []);
   } else if (mode === "combine" && (p.seeds?.length || 0) >= 2) {
-    cores = combineFrom(p.seeds!, lang);
+    cores = combineFrom(p.seeds!);
   } else {
     const ci = (p.colorInput || "").trim();
-    if (ci) cores = generateFromInput(ci, lang);
-    else { const g = parseColorInput(p.description || ""); cores = algorithmicPalettes(g.base, { luxe: g.luxe }, lang); }
+    if (ci) cores = generateFromInput(ci);
+    else { const g = parseColorInput(p.description || ""); cores = algorithmicPalettes(g.base, { luxe: g.luxe }); }
   }
 
   return { engine: "algorithmic", palettes: normalizeAll(coerceLightDark(cores), p.startIndex || 0) };

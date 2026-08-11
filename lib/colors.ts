@@ -101,9 +101,12 @@ export function readableInk(hex: string, target = 4.5): string {
 }
 
 // ---------- انواع پالت ----------
+/** متنِ دوزبانه؛ در زمانِ رندر بر اساس زبانِ فعلی انتخاب می‌شود (نه زمانِ تولید). */
+export type Localized = { fa: string; en: string };
+
 export interface CorePalette {
-  name: string;
-  subtitle: string;
+  name: Localized;
+  subtitle: Localized;
   strategy: string;
   primary: string; // رنگ اصلی (500)
   accent: string;
@@ -113,8 +116,8 @@ export interface CorePalette {
 
 export interface RenderPalette {
   id: string;
-  name: string;
-  subtitle: string;
+  name: Localized;
+  subtitle: Localized;
   strategy: string;
   dark: boolean;
   scale: Record<string, string>; // 50..950

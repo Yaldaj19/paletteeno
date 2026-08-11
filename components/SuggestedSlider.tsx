@@ -35,7 +35,7 @@ export default function SuggestedSlider({ lang }: { lang: Lang }) {
     }
   }, []);
 
-  const palettes = weeklySuggestions(bases, lang);
+  const palettes = weeklySuggestions(bases);
   if (!palettes.length) return null;
 
   return (
@@ -43,10 +43,10 @@ export default function SuggestedSlider({ lang }: { lang: Lang }) {
       <h2 className="t-strong mb-7 px-4 text-center text-2xl font-black">{t.suggestedTitle}</h2>
       <div className="marquee" dir="ltr" style={{ ["--marquee-dur" as string]: "75s" }}>
         <div className="marquee-group">
-          {palettes.map((p, i) => <MarqueeCard key={"a" + i} p={p} />)}
+          {palettes.map((p, i) => <MarqueeCard key={"a" + i} p={p} lang={lang} />)}
         </div>
         <div className="marquee-group" aria-hidden="true">
-          {palettes.map((p, i) => <MarqueeCard key={"b" + i} p={p} />)}
+          {palettes.map((p, i) => <MarqueeCard key={"b" + i} p={p} lang={lang} />)}
         </div>
       </div>
     </section>

@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { RenderPalette } from "@/lib/colors";
 import PaletteCard from "@/components/PaletteCard";
-import { TOPICS, sampleFor, labelFor, type TopicSample } from "@/lib/topics";
+import { TOPICS, sampleFor, labelFor } from "@/lib/topics";
 import { getDict, type Lang } from "@/lib/i18n";
 import { localGenerate } from "@/lib/engine";
 import SuggestedSlider from "@/components/SuggestedSlider";
@@ -11,14 +11,22 @@ type Theme = "dark" | "light";
 
 const MODERN_BASES = ["#7C3AED", "#0EA5E9", "#F43F5E", "#10B981", "#F59E0B", "#6366F1", "#EC4899", "#14B8A6", "#A47864", "#8B5CF6", "#0D9488", "#E11D48", "#DB2777", "#22C55E", "#F97316"];
 
+// شناسه‌ی زبان‌خنثیِ عنوانِ هر دسته؛ در زمانِ رندر با زبانِ فعلی ترجمه می‌شود.
+type TitleSpec =
+  | { kind: "color"; value: string }
+  | { kind: "topic"; keys: string[] }
+  | { kind: "desc" }
+  | { kind: "new" }
+  | { kind: "variations"; n: number }
+  | { kind: "combine"; nums: number[] };
+
 interface Batch {
   id: number;
-  title: string;
+  titleSpec: TitleSpec;
   engine: string;
   palettes: RenderPalette[];
   startNumber: number;
-  samples: TopicSample[];
-  lang: Lang;
+  topicKeys: string[];
 }
 
 export default function Home() {
@@ -65,17 +73,37 @@ export default function Home() {
     document.documentElement.dataset.theme = theme;
     try { localStorage.setItem("theme", theme); } catch {}
   }, [theme]);
+  // بستن پاپ‌آورِ منو با کلید Esc
+  useEffect(() => {
+    if (!navOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setNavOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [navOpen]);
 
   const flat = useMemo(() => batches.flatMap((b) => b.palettes), [batches]);
   const total = flat.length;
-  const currentSamples = useMemo(() => {
-    const s = topicKeys.map((k) => sampleFor(TOPICS.find((tt) => tt.key === k), lang));
-    return s.length ? s : [sampleFor(undefined, lang)];
-  }, [topicKeys, lang]);
   const topicLabels = useMemo(
     () => topicKeys.map((k) => { const tt = TOPICS.find((x) => x.key === k); return tt ? labelFor(tt, lang) : ""; }).filter(Boolean).join("، "),
     [topicKeys, lang]
   );
+
+  // عنوانِ هر دسته را در زمانِ رندر با زبانِ فعلی می‌سازد تا با تغییر زبان به‌روز شود.
+  const titleText = (spec: TitleSpec): string => {
+    const sep = lang === "en" ? ", " : "، ";
+    switch (spec.kind) {
+      case "color": return t.titleColor(spec.value);
+      case "topic": return t.titleTopic(spec.keys.map((k) => { const tt = TOPICS.find((x) => x.key === k); return tt ? labelFor(tt, lang) : ""; }).filter(Boolean).join(sep));
+      case "desc": return t.titleByDesc;
+      case "new": return t.titleNew;
+      case "variations": return t.titleVariations(spec.n);
+      case "combine": return t.titleCombine(spec.nums.map((n) => "#" + n).join(sep));
+    }
+  };
+
+  // نمونه‌متنِ پیش‌نمایشِ هر دسته بر اساس موضوع‌های همان دسته + زبانِ فعلی.
+  const samplesFor = (keys: string[]) =>
+    keys.length ? keys.map((k) => sampleFor(TOPICS.find((tt) => tt.key === k), lang)) : [sampleFor(undefined, lang)];
 
   const toggleTopic = (key: string) =>
     setTopicKeys((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : prev.length < 2 ? [...prev, key] : prev));
@@ -91,15 +119,15 @@ export default function Home() {
     return { primary: p.scale["500"], accent: p.accent };
   };
 
-  function runGenerate(payload: Record<string, unknown>, title: string, onErr: (m: string) => void, setBusy: (b: boolean) => void) {
+  function runGenerate(payload: Record<string, unknown>, titleSpec: TitleSpec, onErr: (m: string) => void, setBusy: (b: boolean) => void) {
     setBusy(true);
     try {
-      const data = localGenerate({ ...payload, startIndex: total }, lang);
+      const data = localGenerate({ ...payload, startIndex: total });
       const id = batchSeq + 1;
       setBatchSeq(id);
       setBatches((prev) => [
         ...prev,
-        { id, title, engine: data.engine, palettes: data.palettes, startNumber: prev.reduce((s, b) => s + b.palettes.length, 0), samples: currentSamples, lang },
+        { id, titleSpec, engine: data.engine, palettes: data.palettes, startNumber: prev.reduce((s, b) => s + b.palettes.length, 0), topicKeys: [...topicKeys] },
       ]);
     } catch (e) {
       onErr(e instanceof Error ? e.message : "Error");
@@ -116,8 +144,8 @@ export default function Home() {
     setError("");
     const colorValue = useHex ? hex : colorInput.trim();
     if (!colorValue && !description.trim() && !topicLabels) { setError(t.errNeed); return; }
-    const title = colorValue ? t.titleColor(colorValue) : topicLabels ? t.titleTopic(topicLabels) : t.titleByDesc;
-    runGenerate({ colorInput: colorValue, description: effectiveDesc(), mode: "fresh" }, title, setError, setLoading);
+    const spec: TitleSpec = colorValue ? { kind: "color", value: colorValue } : topicKeys.length ? { kind: "topic", keys: [...topicKeys] } : { kind: "desc" };
+    runGenerate({ colorInput: colorValue, description: effectiveDesc(), mode: "fresh" }, spec, setError, setLoading);
   }
 
   function doNewPalettes() {
@@ -125,7 +153,7 @@ export default function Home() {
     const pool = MODERN_BASES.filter((c) => c !== lastBase);
     const pick = pool[Math.floor(Math.random() * pool.length)];
     setLastBase(pick);
-    runGenerate({ colorInput: pick, description: effectiveDesc(refineDesc), mode: "fresh" }, t.titleNew, setRefineError, setRefineLoading);
+    runGenerate({ colorInput: pick, description: effectiveDesc(refineDesc), mode: "fresh" }, { kind: "new" }, setRefineError, setRefineLoading);
   }
 
   function doTopicSuggest() {
@@ -134,7 +162,7 @@ export default function Home() {
     if (useHex || colorInput.trim()) { generate(); return; }
     const colors = [...new Set(topicKeys.flatMap((k) => TOPICS.find((tt) => tt.key === k)?.colors ?? []))];
     if (!colors.length) { setError(t.errTopic); return; }
-    runGenerate({ mode: "topic", topicColors: colors, description: effectiveDesc() }, t.titleTopic(topicLabels), setError, setLoading);
+    runGenerate({ mode: "topic", topicColors: colors, description: effectiveDesc() }, { kind: "topic", keys: [...topicKeys] }, setError, setLoading);
   }
 
   function doVariations() {
@@ -143,7 +171,7 @@ export default function Home() {
     if (!n || n < 1 || n > total) { setRefineError(t.errRange(total)); return; }
     const seed = seedOf(n);
     if (!seed) { setRefineError(t.errRange(total)); return; }
-    runGenerate({ mode: "variations", seeds: [seed], description: effectiveDesc(refineDesc) }, t.titleVariations(n), setRefineError, setRefineLoading);
+    runGenerate({ mode: "variations", seeds: [seed], description: effectiveDesc(refineDesc) }, { kind: "variations", n }, setRefineError, setRefineLoading);
   }
 
   function doCombine() {
@@ -151,7 +179,7 @@ export default function Home() {
     if (combineNums.length < 2) { setRefineError(t.errCombine); return; }
     const seeds = combineNums.map(seedOf).filter(Boolean) as { primary: string; accent: string }[];
     if (seeds.length < 2) { setRefineError(t.errCombine); return; }
-    runGenerate({ mode: "combine", seeds, description: effectiveDesc(refineDesc) }, t.titleCombine(combineNums.map((n) => "#" + n).join("، ")), setRefineError, setRefineLoading);
+    runGenerate({ mode: "combine", seeds, description: effectiveDesc(refineDesc) }, { kind: "combine", nums: [...combineNums] }, setRefineError, setRefineLoading);
   }
 
   function addCombineNum(raw: string) {
@@ -161,7 +189,6 @@ export default function Home() {
   }
 
   const hasColor = useHex || colorInput.trim().length > 0;
-  const floatSide = lang === "en" ? "left-6 items-start" : "right-6 items-end";
 
   return (
     <div dir={t.dir}>
@@ -276,19 +303,22 @@ export default function Home() {
       {/* ===================== نتایج (تاریخچه) ===================== */}
       {batches.length > 0 && (
         <section className="mx-auto max-w-6xl px-4 pb-4 pt-10">
-          {batches.map((b) => (
+          {batches.map((b) => {
+            const bSamples = samplesFor(b.topicKeys);
+            return (
             <div key={b.id} id={`batch-${b.id}`} className="mb-12 scroll-mt-6">
               <div className="mb-5 flex flex-wrap items-center gap-3 border-b t-brd pb-3">
-                <h2 className="text-lg font-black t-strong">{b.title}</h2>
+                <h2 className="text-lg font-black t-strong">{titleText(b.titleSpec)}</h2>
                 <span className="text-[11px] t-soft" dir="ltr">#{b.startNumber + 1}–#{b.startNumber + b.palettes.length}</span>
               </div>
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {b.palettes.map((p, i) => (
-                  <PaletteCard key={b.id + "-" + i} p={p} number={b.startNumber + i + 1} sample={b.samples[i % b.samples.length]} lang={b.lang} />
+                  <PaletteCard key={b.id + "-" + i} p={p} number={b.startNumber + i + 1} sample={bSamples[i % bSamples.length]} lang={lang} />
                 ))}
               </div>
             </div>
-          ))}
+            );
+          })}
         </section>
       )}
 
@@ -364,10 +394,11 @@ export default function Home() {
       )}
 
       {/* ===================== دکمه‌های شناور: تم + زبان + CTA ===================== */}
-      <div className={`fixed bottom-6 z-50 flex flex-col gap-3 ${floatSide}`}>
-        {/* کادر ناوبری */}
+      <div className={`fixed bottom-6 z-50 ${lang === "en" ? "left-6" : "right-6"}`}>
+        <div className="relative flex flex-col items-center gap-3">
+        {/* کادر ناوبری — پاپ‌آورِ خارج از جریان تا با باز/بسته‌شدن، دکمه‌ها جابه‌جا نشوند */}
         {navOpen && (
-          <div className={`max-h-[55vh] w-64 overflow-y-auto rounded-2xl border border-[#ffffff1f] bg-[#14141F]/95 p-2 shadow-[0_12px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl ${lang === "en" ? "text-left" : "text-right"}`}>
+          <div id="fab-nav" className={`absolute bottom-full mb-3 max-h-[55vh] w-64 overflow-y-auto rounded-2xl border border-[#ffffff1f] bg-[#14141F]/95 p-2 shadow-[0_12px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl ${lang === "en" ? "left-0 text-left" : "right-0 text-right"}`}>
             <button type="button" onClick={() => scrollTo("top")}
                     className="mb-1 w-full rounded-xl bg-[linear-gradient(135deg,#7C3AED,#4F46E5)] px-3 py-2.5 text-sm font-bold text-white transition hover:opacity-90">
               {t.navFromStart}
@@ -382,7 +413,7 @@ export default function Home() {
                 {batches.map((b) => (
                   <button key={b.id} type="button" onClick={() => scrollTo(`batch-${b.id}`)}
                           className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-xs text-white opacity-70 transition hover:bg-[#ffffff14] hover:opacity-100">
-                    <span className="truncate">{b.title}</span>
+                    <span className="truncate">{titleText(b.titleSpec)}</span>
                     <span className="shrink-0 opacity-60" dir="ltr">#{b.startNumber + 1}</span>
                   </button>
                 ))}
@@ -411,7 +442,7 @@ export default function Home() {
         <div className="relative h-14 w-14">
           <div className="pointer-events-none absolute -inset-[3px] rounded-full bg-[conic-gradient(from_0deg,#F43F5E,#F59E0B,#10B981,#06B6D4,#7C3AED,#EC4899,#F43F5E)] animate-[spin360_4s_linear_infinite]" />
           {!navOpen && <div className="pointer-events-none absolute -inset-1 rounded-full bg-fuchsia-500/40 blur-xl animate-[haloPulse_2s_ease-in-out_infinite]" />}
-          <button type="button" onClick={() => setNavOpen((o) => !o)} aria-label="menu"
+          <button type="button" onClick={() => setNavOpen((o) => !o)} aria-label="menu" aria-expanded={navOpen} aria-controls="fab-nav"
                   className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#14141F] shadow-[0_8px_30px_rgba(124,58,237,0.5)] transition active:scale-95">
             {navOpen ? (
               <span className="text-2xl text-white">✕</span>
@@ -420,6 +451,7 @@ export default function Home() {
               <img src="/favicon-paletteeno.webp" alt="menu" className="h-9 w-9 rounded-full object-contain" />
             )}
           </button>
+        </div>
         </div>
       </div>
 
