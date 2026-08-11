@@ -40,7 +40,22 @@ export default function SuggestedSlider({ lang }: { lang: Lang }) {
 
   return (
     <section id="suggested" aria-label={t.suggestedTitle} className="scroll-mt-6 py-14">
-      <h2 className="t-strong mb-7 px-4 text-center text-2xl font-black">{t.suggestedTitle}</h2>
+      {/* عنوانِ تزئین‌شده — ستاره‌های درخشان + خطوطِ محوشونده در دو طرف */}
+      <div className="mb-8 flex items-center justify-center gap-3 px-4" dir={t.dir}>
+        <span aria-hidden className="hidden h-px w-16 bg-[linear-gradient(to_right,transparent,var(--fg-faint))] sm:block md:w-28" />
+        <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-fuchsia-400 animate-[twinkle_3s_ease-in-out_infinite]" fill="currentColor">
+          <path d="M12 2l1.6 6.4L20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6z" />
+        </svg>
+        <h2 className="text-center text-2xl font-black tracking-tight md:text-3xl">
+          <span className="bg-[linear-gradient(120deg,#A78BFA,#60A5FA,#34D399,#FBBF24)] bg-[length:200%_auto] bg-clip-text text-transparent animate-[gradientShift_6s_ease_infinite]">
+            {t.suggestedTitle}
+          </span>
+        </h2>
+        <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-cyan-400 animate-[twinkle_3s_ease-in-out_1.5s_infinite]" fill="currentColor">
+          <path d="M12 2l1.6 6.4L20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6z" />
+        </svg>
+        <span aria-hidden className="hidden h-px w-16 bg-[linear-gradient(to_left,transparent,var(--fg-faint))] sm:block md:w-28" />
+      </div>
       <div className="marquee" dir="ltr" style={{ ["--marquee-dur" as string]: "75s" }}>
         <div className="marquee-group">
           {palettes.map((p, i) => <MarqueeCard key={"a" + i} p={p} lang={lang} />)}

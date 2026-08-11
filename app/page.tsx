@@ -472,7 +472,7 @@ export default function Home() {
         <div className="relative flex flex-col items-center gap-3">
         {/* کادر ناوبری — پاپ‌آورِ خارج از جریان تا با باز/بسته‌شدن، دکمه‌ها جابه‌جا نشوند */}
         {navOpen && (
-          <div id="fab-nav" className={`absolute bottom-full mb-3 max-h-[55vh] w-64 overflow-y-auto rounded-2xl border border-[#ffffff1f] bg-[#14141F]/95 p-2 shadow-[0_12px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl ${lang === "en" ? "left-0 text-left" : "right-0 text-right"}`}>
+          <div id="fab-nav" className={`absolute bottom-0 max-h-[70vh] w-64 overflow-y-auto rounded-2xl border border-[#ffffff1f] bg-[#14141F]/95 p-2 shadow-[0_12px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl ${lang === "en" ? "left-full ml-3 text-left" : "right-full mr-3 text-right"}`}>
             <button type="button" onClick={() => scrollTo("top")}
                     className="mb-1 w-full rounded-xl bg-[linear-gradient(135deg,#7C3AED,#4F46E5)] px-3 py-2.5 text-sm font-bold text-white transition hover:opacity-90">
               {t.navFromStart}
@@ -500,16 +500,39 @@ export default function Home() {
           </div>
         )}
 
-        {/* دکمه‌ی تم روشن/دارک */}
-        <button type="button" onClick={() => setTheme((th) => (th === "dark" ? "light" : "dark"))} aria-label="theme"
-                className="flex h-14 w-14 items-center justify-center rounded-full border border-[#ffffff26] bg-[#14141F] text-xl shadow-lg transition hover:scale-105 active:scale-95">
-          {theme === "dark" ? "☀️" : "🌙"}
+        {/* دکمه‌ی تم روشن/دارک — آیکنِ SVG با انیمیشنِ طلوع/غروب */}
+        <button type="button" onClick={() => setTheme((th) => (th === "dark" ? "light" : "dark"))}
+                aria-label="theme" title={theme === "dark" ? "Light" : "Dark"}
+                className="group flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-[#ffffff26] bg-[#14141F] shadow-lg transition hover:scale-105 active:scale-95">
+          <span key={theme} className="animate-[rise_.4s_cubic-bezier(.22,1,.36,1)]">
+            {theme === "dark" ? (
+              // خورشید (سوییچ به روشن)
+              <svg viewBox="0 0 24 24" className="h-6 w-6 text-amber-300 transition-transform duration-500 group-hover:rotate-90" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none" />
+                <path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8L6 18M18 6l1.8-1.8" />
+              </svg>
+            ) : (
+              // ماه (سوییچ به دارک)
+              <svg viewBox="0 0 24 24" className="h-6 w-6 text-indigo-200 transition-transform duration-500 group-hover:-rotate-12" fill="currentColor">
+                <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 1 0 9.8 9.8z" />
+                <circle cx="17" cy="6" r="1" className="text-amber-200" fill="currentColor" opacity="0.9" />
+                <circle cx="20" cy="10" r="0.6" fill="currentColor" opacity="0.7" />
+              </svg>
+            )}
+          </span>
         </button>
 
-        {/* دکمه‌ی زبان (قرینه‌ی دکمه‌ی تم) */}
-        <button type="button" onClick={() => setLang((l) => (l === "fa" ? "en" : "fa"))} aria-label="language"
-                className="flex h-14 w-14 items-center justify-center rounded-full border border-[#ffffff26] bg-[#14141F] text-base font-black text-white shadow-lg transition hover:scale-105 active:scale-95">
-          {lang === "fa" ? "EN" : "فا"}
+        {/* دکمه‌ی زبان — پیل با فلیپِ سه‌بعدی و آیکنِ کره */}
+        <button type="button" onClick={() => setLang((l) => (l === "fa" ? "en" : "fa"))}
+                aria-label="language" title={lang === "fa" ? "English" : "فارسی"}
+                className="group relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-[#ffffff26] bg-[#14141F] shadow-lg transition [perspective:400px] hover:scale-105 active:scale-95">
+          <svg viewBox="0 0 24 24" className="pointer-events-none absolute h-9 w-9 text-white/10 transition-transform duration-700 group-hover:rotate-180" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9S14.5 21.5 12 21c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z" />
+          </svg>
+          <span key={lang} className="relative bg-[linear-gradient(135deg,#A78BFA,#60A5FA,#34D399)] bg-clip-text text-base font-black text-transparent animate-[flipIn_.4s_ease] [transform-style:preserve-3d]">
+            {lang === "fa" ? "EN" : "فا"}
+          </span>
         </button>
 
         {/* CTA — همیشه نمایان، با فاویکون و بوردر رنگیِ چرخان */}
