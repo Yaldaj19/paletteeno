@@ -230,20 +230,23 @@ export default function Home() {
 
   return (
     <div dir={t.dir}>
-      {/* ===================== هیرو ===================== */}
-      <section id="top" className="relative flex min-h-[72vh] items-center justify-center overflow-hidden px-4 pt-2 pb-12">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-32 -right-32 h-[600px] w-[600px] blur-[80px] animate-[aurora1_12s_ease-in-out_infinite_alternate]"
-               style={{ background: "radial-gradient(ellipse at center, #7C3AED88 0%, transparent 70%)" }} />
-          <div className="absolute -bottom-24 -left-24 h-[520px] w-[520px] blur-[70px] animate-[aurora2_15s_ease-in-out_infinite_alternate]"
-               style={{ background: "radial-gradient(ellipse at center, #06B6D466 0%, transparent 70%)" }} />
-          <div className="absolute left-1/2 top-1/2 h-[380px] w-[460px] blur-[100px] animate-[aurora3_18s_ease-in-out_infinite_alternate]"
-               style={{ background: "radial-gradient(ellipse at center, #F43F5E55 0%, transparent 70%)" }} />
-          <div className="absolute left-1/3 top-16 h-[320px] w-[320px] blur-[70px] animate-[aurora1_20s_ease-in-out_3s_infinite_alternate]"
-               style={{ background: "radial-gradient(ellipse at center, #F59E0B44 0%, transparent 70%)" }} />
-          <div className="noise-layer absolute inset-0 opacity-[0.04]" />
-        </div>
+      {/* ===== لایه‌ی اورورای سراسری و ثابت — پشتِ همه‌ی بخش‌ها تا صفحه یک‌پارچه دیده شود ===== */}
+      <div className="aurora-field pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-40 -right-24 h-[620px] w-[620px] blur-[90px] animate-[aurora1_14s_ease-in-out_infinite_alternate]"
+             style={{ background: "radial-gradient(ellipse at center, #7C3AED66 0%, transparent 70%)" }} />
+        <div className="absolute -left-24 top-1/4 h-[520px] w-[520px] blur-[80px] animate-[aurora2_17s_ease-in-out_infinite_alternate]"
+             style={{ background: "radial-gradient(ellipse at center, #06B6D455 0%, transparent 70%)" }} />
+        <div className="absolute left-1/2 top-1/2 h-[460px] w-[560px] blur-[110px] animate-[aurora3_20s_ease-in-out_infinite_alternate]"
+             style={{ background: "radial-gradient(ellipse at center, #F43F5E44 0%, transparent 70%)" }} />
+        <div className="absolute -bottom-32 right-1/4 h-[520px] w-[520px] blur-[90px] animate-[aurora1_22s_ease-in-out_3s_infinite_alternate]"
+             style={{ background: "radial-gradient(ellipse at center, #4F46E555 0%, transparent 70%)" }} />
+        <div className="absolute bottom-8 -left-16 h-[360px] w-[360px] blur-[80px] animate-[aurora2_19s_ease-in-out_2s_infinite_alternate]"
+             style={{ background: "radial-gradient(ellipse at center, #EC489944 0%, transparent 70%)" }} />
+        <div className="noise-layer absolute inset-0 opacity-[0.035]" />
+      </div>
 
+      {/* ===================== هیرو ===================== */}
+      <section id="top" className="relative flex min-h-[72vh] items-center justify-center px-4 pt-2 pb-12">
         <div className="relative z-10 mx-auto w-full max-w-4xl text-center">
           {/* لوگو بالای عنوان */}
           {/* eslint-disable-next-line @next/next/no-img-element */}

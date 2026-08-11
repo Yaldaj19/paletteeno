@@ -41,23 +41,20 @@ body {
    تا بخش‌ها به‌جای «بریده و جدا»، به‌هم متصل حس شوند. */
 [data-theme="dark"] body, :root body {
   background:
-    radial-gradient(70rem 48rem at 14% -4%, rgba(124, 58, 237, 0.20), transparent 58%),
-    radial-gradient(60rem 44rem at 100% 10%, rgba(6, 182, 212, 0.13), transparent 60%),
-    radial-gradient(56rem 40rem at 44% 48%, rgba(236, 72, 153, 0.08), transparent 62%),
-    radial-gradient(60rem 44rem at 50% 104%, rgba(79, 70, 229, 0.14), transparent 62%),
-    #0D0D1A;
+    radial-gradient(70rem 50rem at 50% -10%, rgba(124, 58, 237, 0.10), transparent 60%),
+    linear-gradient(180deg, #0F0E1E 0%, #0C0B18 100%);
   background-attachment: fixed;
 }
 /* بک‌گراند گرمِ ملایمِ حالت روشن — چند هاله‌ی رنگیِ محو که حس سرد بودن را می‌گیرد */
 [data-theme="light"] body {
   background:
-    radial-gradient(70rem 48rem at 12% -6%, rgba(124, 58, 237, 0.11), transparent 58%),
-    radial-gradient(60rem 44rem at 100% 8%, rgba(6, 182, 212, 0.09), transparent 60%),
-    radial-gradient(56rem 40rem at 46% 50%, rgba(236, 72, 153, 0.05), transparent 62%),
-    radial-gradient(56rem 40rem at 50% 106%, rgba(244, 63, 94, 0.07), transparent 62%),
+    radial-gradient(70rem 50rem at 50% -10%, rgba(124, 58, 237, 0.06), transparent 60%),
     linear-gradient(180deg, #FBFAF7 0%, #F4F1EC 55%, #EFEBE4 100%);
   background-attachment: fixed;
 }
+/* روی تمِ روشن هاله‌های اورورا را ملایم‌تر می‌کنیم تا خیلی پُررنگ نشوند */
+[data-theme="light"] .aurora-field { opacity: 0.55; }
+[data-theme="light"] .noise-layer { opacity: 0 !important; }
 h1, h2, h3 { letter-spacing: -0.01em; }
 
 /* کلاس‌های تم‌آگاه */
