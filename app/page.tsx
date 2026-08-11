@@ -543,7 +543,7 @@ export default function Home() {
           <div className="pointer-events-none absolute -inset-[3px] rounded-full bg-[conic-gradient(from_0deg,#FF4D6D,#FF7A5C,#FF9F68,#FFC46B,#FF7AA8,#FF4D6D)] animate-[spin360_4s_linear_infinite]" />
           {!navOpen && <div className="pointer-events-none absolute -inset-1 rounded-full bg-[#FF7A8A]/45 blur-xl animate-[haloPulse_2s_ease-in-out_infinite]" />}
           <button type="button" onClick={() => setNavOpen((o) => !o)} aria-label="menu" aria-expanded={navOpen} aria-controls="fab-nav"
-                  className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#14141F] shadow-[0_8px_30px_rgba(255,77,109,0.45)] transition active:scale-95">
+                  className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#14141F] shadow-[0_8px_30px_rgba(255,77,109,0.45)] transition hover:scale-105 hover:shadow-[0_10px_36px_rgba(255,77,109,0.6)] active:scale-95">
             {navOpen ? (
               <span className="text-2xl text-white">✕</span>
             ) : (

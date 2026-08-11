@@ -16,6 +16,10 @@
 h1, h2, h3 { font-family: var(--font-display); }
 .font-brand { font-family: var(--font-brand); letter-spacing: 0; }
 
+/* نشانگرِ ماوس روی همه‌ی دکمه‌ها */
+button:not(:disabled), [role="button"], label[for], summary { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+
 /* ---------- توکن‌های تم (روشن/دارک) ---------- */
 :root, [data-theme="dark"] {
   --page: #0D0D1A;
