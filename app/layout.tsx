@@ -42,7 +42,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <link rel="shortcut icon" type="image/webp" href="./favicon-paletteeno.webp" />
         <link rel="apple-touch-icon" href="./favicon-paletteeno.webp" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+        {/* فونتِ نمایشیِ سرتیترها (هنری‌تر) */}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/gandom-font@v0.8/dist/font-face.css" />
+        {/* فونتِ برند و عنوان بخش‌ها */}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body className="min-h-full font-sans">{children}</body>
