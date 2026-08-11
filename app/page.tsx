@@ -247,7 +247,7 @@ export default function Home() {
         <div className="relative z-10 mx-auto w-full max-w-4xl text-center">
           {/* لوگو بالای عنوان */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-paletteeno.webp" alt={t.brandDot} className="mx-auto mb-1 h-14 w-auto drop-shadow-[0_4px_24px_rgba(124,58,237,0.4)] md:h-20" />
+          <img src="./logo-paletteeno.webp" alt={t.brandDot} className="mx-auto mb-1 h-14 w-auto drop-shadow-[0_4px_24px_rgba(124,58,237,0.4)] md:h-20" />
 
           {/* h2: نام برند (وردمارک گرادیانتی) */}
           <h2 className="bg-[linear-gradient(135deg,#A78BFA_0%,#60A5FA_25%,#34D399_50%,#FBBF24_75%,#F472B6_100%)] bg-[length:300%_300%] bg-clip-text text-5xl font-black leading-tight text-transparent animate-[gradientShift_6s_ease_infinite] md:text-7xl">
@@ -522,7 +522,7 @@ export default function Home() {
               <span className="text-2xl text-white">✕</span>
             ) : (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src="/favicon-paletteeno.webp" alt="menu" className="h-9 w-9 rounded-full object-contain" />
+              <img src="./favicon-paletteeno.webp" alt="menu" className="h-9 w-9 rounded-full object-contain" />
             )}
           </button>
         </div>
