@@ -8,11 +8,6 @@ export const metadata: Metadata = {
     "پالتینو: سیستم دیزاین اتوماتیک پلت رنگی. یک رنگ، اسم یا موضوع بده و شش پالت هماهنگ با رنگ‌های مکمل بگیر — سه روشن و سه دارک، آماده‌ی استفاده. دوزبانه فارسی/انگلیسی.",
   keywords: ["پلت رنگی", "پالت رنگ", "طراحی رنگ", "رنگ مکمل", "color palette", "palette generator", "design system", "پالتینو", "Palettino"],
   alternates: { canonical: "https://paletteeno.yaldajahanshahi.ir" },
-  icons: {
-    icon: [{ url: "/favicon-paletteeno.webp", type: "image/webp" }],
-    shortcut: ["/favicon-paletteeno.webp"],
-    apple: ["/favicon-paletteeno.webp"],
-  },
   openGraph: {
     type: "website",
     title: "پالتینو | Palettino — سیستم دیزاین اتوماتیک پلت رنگی",
@@ -42,6 +37,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fa" dir="rtl" data-theme="dark" className="h-full antialiased">
       <head>
+        {/* فاویکونِ مسیرِ نسبی تا هم روی دامنه‌ی ریشه و هم روی زیرمسیر (XAMPP) نمایش داده شود */}
+        <link rel="icon" type="image/webp" href="./favicon-paletteeno.webp" />
+        <link rel="shortcut icon" type="image/webp" href="./favicon-paletteeno.webp" />
+        <link rel="apple-touch-icon" href="./favicon-paletteeno.webp" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
