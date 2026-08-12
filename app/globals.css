@@ -8,10 +8,6 @@
 :root {
   --font-display: "Gandom", "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
   --font-brand: "Lalezar", "Gandom", "Vazirmatn", sans-serif;
-  /* پالتِ اکسنتِ «غروب مرجانی/هلویی» */
-  --acc-a: #FF6B81;   /* مرجانیِ صورتی */
-  --acc-b: #FF9F68;   /* هلویی/زردآلویی */
-  --acc-strong: #FF4D6D;
 }
 h1, h2, h3 { font-family: var(--font-display); }
 .font-brand { font-family: var(--font-brand); letter-spacing: 0; }
@@ -21,6 +17,7 @@ button:not(:disabled), [role="button"], label[for], summary { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
 
 /* ---------- توکن‌های تم (روشن/دارک) ---------- */
+/* دارک: اکسنتِ سردِ رنگی‌رنگی (سبز/زرد/فیروزه‌ای/لیمویی) */
 :root, [data-theme="dark"] {
   --page: #0D0D1A;
   --fg: #ffffff;
@@ -29,7 +26,20 @@ button:disabled { cursor: not-allowed; }
   --glass: rgba(255, 255, 255, 0.08);
   --glass-2: rgba(255, 255, 255, 0.06);
   --glass-brd: rgba(255, 255, 255, 0.12);
+
+  --acc-a: #34D399;   /* زمردی */
+  --acc-b: #FACC15;   /* زرد */
+  --acc-c: #A3E635;   /* لیمویی */
+  --acc-strong: #10B981;  /* سبز */
+  --acc-grad:  linear-gradient(135deg, #34D399, #FACC15);
+  --acc-grad2: linear-gradient(135deg, #22D3EE, #34D399);
+  --acc-grad3: linear-gradient(135deg, #A3E635, #22D3EE);
+  --acc-grad4: linear-gradient(135deg, #FACC15, #34D399);
+  --brand-grad: linear-gradient(135deg, #22D3EE 0%, #34D399 35%, #A3E635 65%, #FACC15 100%);
+  --acc-conic: conic-gradient(from 0deg, #22D3EE, #34D399, #A3E635, #FACC15, #2DD4BF, #22D3EE);
+  --acc-shadow: 16, 185, 129;
 }
+/* لایت: اکسنتِ گرمِ «غروب مرجانی/هلویی» (بدون تغییر) */
 [data-theme="light"] {
   --page: #F6F4F0;
   --fg: #1F1B2E;
@@ -38,7 +48,60 @@ button:disabled { cursor: not-allowed; }
   --glass: rgba(31, 27, 46, 0.04);
   --glass-2: rgba(255, 255, 255, 0.55);
   --glass-brd: rgba(31, 27, 46, 0.1);
+
+  --acc-a: #FF6B81;   /* مرجانیِ صورتی */
+  --acc-b: #FF9F68;   /* هلویی */
+  --acc-c: #FFC46B;   /* زردآلویی */
+  --acc-strong: #FF4D6D;
+  --acc-grad:  linear-gradient(135deg, #FF6B81, #FF9F68);
+  --acc-grad2: linear-gradient(135deg, #FF7A5C, #FF4D6D);
+  --acc-grad3: linear-gradient(135deg, #FF9F68, #FF6B81);
+  --acc-grad4: linear-gradient(135deg, #FF4D6D, #FF7A5C);
+  --brand-grad: linear-gradient(135deg, #FF8FA3 0%, #FF9F68 38%, #FFC46B 66%, #FF7AA8 100%);
+  --acc-conic: conic-gradient(from 0deg, #FF4D6D, #FF7A5C, #FF9F68, #FFC46B, #FF7AA8, #FF4D6D);
+  --acc-shadow: 255, 77, 109;
 }
+
+/* ---------- کلاس‌های اکسنتِ تم‌آگاه (رنگ دکمه‌ها بر اساس تم عوض می‌شود) ---------- */
+.acc-solid { background: var(--acc-strong); color: #fff; }
+.acc-grad  { background-image: var(--acc-grad);  color: #fff; }
+.acc-grad2 { background-image: var(--acc-grad2); color: #fff; }
+.acc-grad3 { background-image: var(--acc-grad3); color: #fff; }
+.acc-grad4 { background-image: var(--acc-grad4); color: #fff; }
+.acc-shadow    { box-shadow: 0 4px 20px rgba(var(--acc-shadow), .38); }
+.acc-shadow-lg { box-shadow: 0 8px 30px rgba(var(--acc-shadow), .5); }
+.brand-grad { background-image: var(--brand-grad); }
+.acc-conic  { background-image: var(--acc-conic); }
+.text-acc  { color: var(--acc-a); }
+.text-acc2 { color: var(--acc-b); }
+.link-acc { transition: color .2s ease; }
+.link-acc:hover { color: var(--acc-a); }
+.acc-halo { background: color-mix(in srgb, var(--acc-a) 45%, transparent); }
+.acc-chip { background: color-mix(in srgb, var(--acc-strong) 40%, transparent); }
+.badge-acc { background: color-mix(in srgb, var(--acc-a) 20%, transparent); color: var(--acc-a); }
+.acc-panel { background-image: linear-gradient(135deg, color-mix(in srgb, var(--acc-a) 14%, transparent), color-mix(in srgb, var(--acc-b) 12%, transparent)); }
+.chip { transition: border-color .2s ease, background .2s ease, color .2s ease; }
+.chip:hover { border-color: color-mix(in srgb, var(--acc-b) 45%, transparent); }
+.chip-on { border-color: color-mix(in srgb, var(--acc-b) 60%, transparent); background: color-mix(in srgb, var(--acc-b) 22%, transparent); color: var(--fg); }
+.chip-cta { border-color: color-mix(in srgb, var(--acc-b) 40%, transparent); background: color-mix(in srgb, var(--acc-b) 16%, transparent); color: var(--fg); transition: background .2s ease; }
+.chip-cta:hover { background: color-mix(in srgb, var(--acc-b) 28%, transparent); }
+.focus-acc:focus, .focus-acc:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--acc-a) 55%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--acc-a) 50%, transparent);
+}
+
+/* هاله‌های اورورا — دارک: سردِ رنگی‌رنگی / لایت: گرم */
+[data-theme="dark"] .blob1, :root .blob1 { background: radial-gradient(ellipse at center, #34D39966 0%, transparent 70%); }
+[data-theme="dark"] .blob2, :root .blob2 { background: radial-gradient(ellipse at center, #22D3EE55 0%, transparent 70%); }
+[data-theme="dark"] .blob3, :root .blob3 { background: radial-gradient(ellipse at center, #A3E63544 0%, transparent 70%); }
+[data-theme="dark"] .blob4, :root .blob4 { background: radial-gradient(ellipse at center, #FACC1555 0%, transparent 70%); }
+[data-theme="dark"] .blob5, :root .blob5 { background: radial-gradient(ellipse at center, #2DD4BF44 0%, transparent 70%); }
+[data-theme="light"] .blob1 { background: radial-gradient(ellipse at center, #FF6B8166 0%, transparent 70%); }
+[data-theme="light"] .blob2 { background: radial-gradient(ellipse at center, #06B6D455 0%, transparent 70%); }
+[data-theme="light"] .blob3 { background: radial-gradient(ellipse at center, #F43F5E44 0%, transparent 70%); }
+[data-theme="light"] .blob4 { background: radial-gradient(ellipse at center, #FF9F6855 0%, transparent 70%); }
+[data-theme="light"] .blob5 { background: radial-gradient(ellipse at center, #EC489944 0%, transparent 70%); }
 
 html {
   font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
@@ -57,8 +120,8 @@ body {
    تا بخش‌ها به‌جای «بریده و جدا»، به‌هم متصل حس شوند. */
 [data-theme="dark"] body, :root body {
   background:
-    radial-gradient(70rem 50rem at 50% -10%, rgba(255, 107, 129, 0.10), transparent 60%),
-    linear-gradient(180deg, #14101A 0%, #100C14 100%);
+    radial-gradient(70rem 50rem at 50% -10%, rgba(52, 211, 153, 0.10), transparent 60%),
+    linear-gradient(180deg, #0C1218 0%, #0A0F14 100%);
   background-attachment: fixed;
 }
 /* بک‌گراند گرمِ ملایمِ حالت روشن — چند هاله‌ی رنگیِ محو که حس سرد بودن را می‌گیرد */

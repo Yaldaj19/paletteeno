@@ -232,16 +232,11 @@ export default function Home() {
     <div dir={t.dir}>
       {/* ===== لایه‌ی اورورای سراسری و ثابت — پشتِ همه‌ی بخش‌ها تا صفحه یک‌پارچه دیده شود ===== */}
       <div className="aurora-field pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 -right-24 h-[620px] w-[620px] blur-[90px] animate-[aurora1_14s_ease-in-out_infinite_alternate]"
-             style={{ background: "radial-gradient(ellipse at center, #FF6B8166 0%, transparent 70%)" }} />
-        <div className="absolute -left-24 top-1/4 h-[520px] w-[520px] blur-[80px] animate-[aurora2_17s_ease-in-out_infinite_alternate]"
-             style={{ background: "radial-gradient(ellipse at center, #06B6D455 0%, transparent 70%)" }} />
-        <div className="absolute left-1/2 top-1/2 h-[460px] w-[560px] blur-[110px] animate-[aurora3_20s_ease-in-out_infinite_alternate]"
-             style={{ background: "radial-gradient(ellipse at center, #F43F5E44 0%, transparent 70%)" }} />
-        <div className="absolute -bottom-32 right-1/4 h-[520px] w-[520px] blur-[90px] animate-[aurora1_22s_ease-in-out_3s_infinite_alternate]"
-             style={{ background: "radial-gradient(ellipse at center, #FF9F6855 0%, transparent 70%)" }} />
-        <div className="absolute bottom-8 -left-16 h-[360px] w-[360px] blur-[80px] animate-[aurora2_19s_ease-in-out_2s_infinite_alternate]"
-             style={{ background: "radial-gradient(ellipse at center, #EC489944 0%, transparent 70%)" }} />
+        <div className="blob1 absolute -top-40 -right-24 h-[620px] w-[620px] blur-[90px] animate-[aurora1_14s_ease-in-out_infinite_alternate]" />
+        <div className="blob2 absolute -left-24 top-1/4 h-[520px] w-[520px] blur-[80px] animate-[aurora2_17s_ease-in-out_infinite_alternate]" />
+        <div className="blob3 absolute left-1/2 top-1/2 h-[460px] w-[560px] blur-[110px] animate-[aurora3_20s_ease-in-out_infinite_alternate]" />
+        <div className="blob4 absolute -bottom-32 right-1/4 h-[520px] w-[520px] blur-[90px] animate-[aurora1_22s_ease-in-out_3s_infinite_alternate]" />
+        <div className="blob5 absolute bottom-8 -left-16 h-[360px] w-[360px] blur-[80px] animate-[aurora2_19s_ease-in-out_2s_infinite_alternate]" />
         <div className="noise-layer absolute inset-0 opacity-[0.035]" />
       </div>
 
@@ -253,7 +248,7 @@ export default function Home() {
           <img src="./logo-paletteeno.webp" alt={t.brandDot} className="mx-auto mb-1 h-14 w-auto drop-shadow-[0_4px_24px_rgba(255,107,129,0.42)] md:h-20" />
 
           {/* h2: نام برند (وردمارک گرادیانتی) */}
-          <h2 className="font-brand bg-[linear-gradient(135deg,#FF8FA3_0%,#FF9F68_38%,#FFC46B_66%,#FF7AA8_100%)] bg-[length:300%_300%] bg-clip-text text-6xl leading-[1.1] text-transparent animate-[gradientShift_6s_ease_infinite] md:text-8xl">
+          <h2 className="font-brand brand-grad bg-[length:300%_300%] bg-clip-text text-6xl leading-[1.1] text-transparent animate-[gradientShift_6s_ease_infinite] md:text-8xl">
             {t.brandDot}
           </h2>
 
@@ -269,22 +264,22 @@ export default function Home() {
             {/* انتخابِ خروجی: رنگِ ساده یا گرادینت */}
             <div className="mb-3 flex items-center gap-2 rounded-xl t-glass2 p-1 text-sm">
               <button type="button" onClick={() => setColorMode("solid")}
-                      className={`flex-1 rounded-lg py-1.5 font-bold transition ${colorMode === "solid" ? "bg-[#FF4D6D] text-white" : "t-soft hover:t-strong"}`}>
+                      className={`flex-1 rounded-lg py-1.5 font-bold transition ${colorMode === "solid" ? "acc-solid" : "t-soft hover:t-strong"}`}>
                 {t.tabSolid}
               </button>
               <button type="button" onClick={() => setColorMode("gradient")}
-                      className={`flex-1 rounded-lg py-1.5 font-bold transition ${colorMode === "gradient" ? "bg-[#FF4D6D] text-white" : "t-soft hover:t-strong"}`}>
+                      className={`flex-1 rounded-lg py-1.5 font-bold transition ${colorMode === "gradient" ? "acc-solid" : "t-soft hover:t-strong"}`}>
                 {t.tabGradient}
               </button>
             </div>
 
             <div className="mb-4 flex items-center gap-2 text-sm">
               <button type="button" onClick={() => setUseHex(false)}
-                      className={`rounded-lg px-3 py-1.5 font-bold transition ${!useHex ? "bg-[#FF4D6D] text-white" : "t-glass t-soft hover:t-strong"}`}>
+                      className={`rounded-lg px-3 py-1.5 font-bold transition ${!useHex ? "acc-solid" : "t-glass t-soft hover:t-strong"}`}>
                 {t.tabName}
               </button>
               <button type="button" onClick={() => setUseHex(true)}
-                      className={`rounded-lg px-3 py-1.5 font-bold transition ${useHex ? "bg-[#FF4D6D] text-white" : "t-glass t-soft hover:t-strong"}`}>
+                      className={`rounded-lg px-3 py-1.5 font-bold transition ${useHex ? "acc-solid" : "t-glass t-soft hover:t-strong"}`}>
                 {t.tabPick}
               </button>
             </div>
@@ -293,11 +288,11 @@ export default function Home() {
               <div>
                 <input value={colorInput} onChange={(e) => setColorInput(e.target.value)}
                        onKeyDown={(e) => e.key === "Enter" && generate()} placeholder={t.namePlaceholder}
-                       className="w-full rounded-xl border t-brd t-glass2 px-4 py-3 text-sm t-strong placeholder:t-faint outline-none transition focus:border-[#FF6B81]/40 focus:ring-2 focus:ring-[#FF6B81]/50" />
+                       className="w-full rounded-xl border t-brd t-glass2 px-4 py-3 text-sm t-strong placeholder:t-faint outline-none transition focus-acc" />
                 <div className="mt-2.5 flex flex-wrap gap-1.5">
                   {t.suggestions.map((s) => (
                     <button key={s} type="button" onClick={() => setColorInput(s)}
-                            className="rounded-full border t-brd t-glass2 px-3 py-1 text-xs t-soft transition hover:border-[#FF7A8A]/40 hover:t-strong">
+                            className="chip rounded-full border t-brd t-glass2 px-3 py-1 text-xs t-soft transition hover:t-strong">
                       {s}
                     </button>
                   ))}
@@ -308,7 +303,7 @@ export default function Home() {
                 <input type="color" value={hex} onChange={(e) => setHex(e.target.value.toUpperCase())}
                        className="h-12 w-14 cursor-pointer rounded-xl border-2 t-brd bg-transparent p-1" />
                 <input value={hex} onChange={(e) => setHex(e.target.value.toUpperCase())} dir="ltr"
-                       className="w-32 rounded-xl border t-brd t-glass2 px-3 py-2.5 font-mono text-sm t-strong outline-none focus:border-[#FF6B81]/40" />
+                       className="w-32 rounded-xl border t-brd t-glass2 px-3 py-2.5 font-mono text-sm t-strong outline-none focus-acc" />
                 <span className="text-sm t-soft">{t.pickBaseHint}</span>
               </div>
             )}
@@ -318,7 +313,7 @@ export default function Home() {
             </p>
 
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder={t.descPlaceholder}
-                      className="mt-3 w-full resize-none rounded-xl border t-brd t-glass2 px-4 py-3 text-sm t-strong placeholder:t-faint outline-none transition focus:border-[#FF9F68]/40 focus:ring-2 focus:ring-[#FF9F68]/40" />
+                      className="mt-3 w-full resize-none rounded-xl border t-brd t-glass2 px-4 py-3 text-sm t-strong placeholder:t-faint outline-none transition focus-acc" />
 
             {/* دکمه‌های موضوع */}
             <div className={`mt-3 ${t.dir === "rtl" ? "text-right" : "text-left"}`}>
@@ -329,7 +324,7 @@ export default function Home() {
                   const disabled = !on && topicKeys.length >= 2;
                   return (
                     <button key={tt.key} type="button" onClick={() => toggleTopic(tt.key)} disabled={disabled}
-                            className={`rounded-full border px-3 py-1 text-xs transition ${on ? "border-[#FFB088]/60 bg-[#FF9F68]/25 text-white" : disabled ? "cursor-not-allowed t-brd t-glass2 t-faint" : "t-brd t-glass2 t-soft hover:border-[#FFB088]/40 hover:t-strong"}`}>
+                            className={`rounded-full border px-3 py-1 text-xs transition ${on ? "chip-on" : disabled ? "cursor-not-allowed t-brd t-glass2 t-faint" : "chip t-brd t-glass2 t-soft hover:t-strong"}`}>
                       {on ? "✓ " : ""}{labelFor(tt, lang)}
                     </button>
                   );
@@ -337,7 +332,7 @@ export default function Home() {
               </div>
               {topicKeys.length > 0 && !hasColor && (
                 <button type="button" onClick={doTopicSuggest} disabled={loading}
-                        className="mt-2.5 rounded-xl border border-[#FFB088]/40 bg-[#FF9F68]/15 px-4 py-2 text-xs font-bold text-[#FFE7D6] transition hover:bg-[#FF9F68]/25 disabled:opacity-60">
+                        className="mt-2.5 rounded-xl border chip-cta px-4 py-2 text-xs font-bold transition disabled:opacity-60">
                   {t.topicAuto}
                 </button>
               )}
@@ -350,7 +345,7 @@ export default function Home() {
                 <div className="flex flex-wrap gap-1.5" dir="ltr">
                   {GRAD_ANGLES.map((a) => (
                     <button key={a} type="button" onClick={() => setGradAngle(a)}
-                            className={`rounded-lg border px-2.5 py-1 font-mono text-xs font-bold transition ${gradAngle === a ? "border-[#FF6B81] bg-[#FF4D6D] text-white" : "t-brd t-glass2 t-soft hover:t-strong"}`}>
+                            className={`rounded-lg border px-2.5 py-1 font-mono text-xs font-bold transition ${gradAngle === a ? "acc-solid" : "t-brd t-glass2 t-soft hover:t-strong"}`}>
                       {a}°
                     </button>
                   ))}
@@ -361,7 +356,7 @@ export default function Home() {
             {error && <p className="mt-3 rounded-lg bg-rose-500/15 px-3 py-2 text-sm text-rose-300">{error}</p>}
 
             <button type="button" onClick={generate} disabled={loading}
-                    className="mt-4 w-full rounded-xl bg-[linear-gradient(135deg,#FF6B81,#FF9F68)] py-3.5 text-sm font-black text-white shadow-[0_4px_20px_rgba(255,77,109,0.4)] transition active:scale-[0.98] hover:opacity-95 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A8A]">
+                    className="mt-4 w-full rounded-xl acc-grad py-3.5 text-sm font-black text-white acc-shadow transition active:scale-[0.98] hover:opacity-95 disabled:opacity-60 focus-acc">
               {loading ? t.building : t.build}
             </button>
           </div>
@@ -370,7 +365,7 @@ export default function Home() {
 
       {/* ===================== نتایج (تاریخچه) ===================== */}
       {batches.length > 0 && (
-        <section className="mx-auto max-w-6xl px-4 pb-4 pt-10">
+        <section className="mx-auto max-w-7xl px-4 pb-4 pt-10">
           {batches.map((b) => {
             const bSamples = samplesFor(b.topicKeys);
             return (
@@ -378,13 +373,13 @@ export default function Home() {
               <div className="mb-5 flex flex-wrap items-center gap-3 border-b t-brd pb-3">
                 <h2 className="text-lg font-black t-strong">{titleText(b.titleSpec)}</h2>
                 {b.kind === "gradient" && (
-                  <span className="rounded-full bg-[#FF6B81]/20 px-2 py-0.5 text-[11px] font-bold text-[#FFCBB0]">{t.tabGradient}</span>
+                  <span className="badge-acc rounded-full px-2 py-0.5 text-[11px] font-bold">{t.tabGradient}</span>
                 )}
                 <span className="text-[11px] t-soft" dir="ltr">
                   {b.kind === "gradient" ? `${b.gradients?.length ?? 0}×` : `#${b.startNumber + 1}–#${b.startNumber + b.palettes.length}`}
                 </span>
               </div>
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {b.kind === "gradient"
                   ? b.gradients!.map((g, i) => (
                       <GradientCard key={b.id + "-g-" + i} g={g} angle={gradAngle} lang={lang} />
@@ -402,7 +397,7 @@ export default function Home() {
       {/* ===================== بازآفرینی / ترکیب ===================== */}
       {total > 0 && (
         <section id="refine" className="scroll-mt-6 px-4 pb-16">
-          <div className="mx-auto max-w-3xl rounded-3xl border t-brd bg-[linear-gradient(135deg,rgba(255,107,129,0.14),rgba(255,159,104,0.12))] p-6 md:p-8">
+          <div className="mx-auto max-w-3xl rounded-3xl border t-brd acc-panel p-6 md:p-8">
             <div className="mb-6 text-center">
               <h2 className="text-2xl font-black t-strong">{t.refineTitle}</h2>
               <p className="mx-auto mt-2 max-w-md text-sm t-soft">{t.refineDesc}</p>
@@ -410,15 +405,15 @@ export default function Home() {
 
             <div className="mx-auto mb-6 flex max-w-lg gap-2 rounded-xl t-glass2 p-1">
               <button type="button" onClick={() => setRefineMode("new")}
-                      className={`flex-1 rounded-lg py-2 text-xs font-bold transition sm:text-sm ${refineMode === "new" ? "bg-[#FF4D6D] text-white" : "t-soft hover:t-strong"}`}>
+                      className={`flex-1 rounded-lg py-2 text-xs font-bold transition sm:text-sm ${refineMode === "new" ? "acc-solid" : "t-soft hover:t-strong"}`}>
                 {t.tabNew}
               </button>
               <button type="button" onClick={() => setRefineMode("variations")}
-                      className={`flex-1 rounded-lg py-2 text-xs font-bold transition sm:text-sm ${refineMode === "variations" ? "bg-[#FF4D6D] text-white" : "t-soft hover:t-strong"}`}>
+                      className={`flex-1 rounded-lg py-2 text-xs font-bold transition sm:text-sm ${refineMode === "variations" ? "acc-solid" : "t-soft hover:t-strong"}`}>
                 {t.tabVariations}
               </button>
               <button type="button" onClick={() => setRefineMode("combine")}
-                      className={`flex-1 rounded-lg py-2 text-xs font-bold transition sm:text-sm ${refineMode === "combine" ? "bg-[#FF4D6D] text-white" : "t-soft hover:t-strong"}`}>
+                      className={`flex-1 rounded-lg py-2 text-xs font-bold transition sm:text-sm ${refineMode === "combine" ? "acc-solid" : "t-soft hover:t-strong"}`}>
                 {t.tabCombine}
               </button>
             </div>
@@ -427,16 +422,16 @@ export default function Home() {
               <div className="text-center">
                 <p className="mx-auto mb-4 max-w-md text-sm t-soft">{t.newDesc}</p>
                 <button type="button" onClick={doNewPalettes} disabled={refineLoading}
-                        className="w-full rounded-xl bg-[linear-gradient(135deg,#FF7A5C,#FF4D6D)] py-3 font-bold text-white shadow-[0_4px_20px_rgba(255,122,92,0.3)] transition active:scale-95 hover:opacity-90 disabled:opacity-60">
+                        className="w-full rounded-xl acc-grad2 py-3 font-bold text-white acc-shadow transition active:scale-95 hover:opacity-90 disabled:opacity-60">
                   {refineLoading ? "…" : t.newBtn}
                 </button>
               </div>
             ) : refineMode === "variations" ? (
               <div className="flex flex-col gap-3 sm:flex-row">
                 <input type="number" min={1} max={total} value={refineNum} onChange={(e) => setRefineNum(e.target.value)} placeholder={t.varPlaceholder(total)}
-                       className="flex-1 rounded-xl border t-brd t-glass2 px-4 py-3 text-center text-lg font-bold t-strong placeholder:t-faint outline-none focus:ring-2 focus:ring-[#FF6B81]/60" />
+                       className="flex-1 rounded-xl border t-brd t-glass2 px-4 py-3 text-center text-lg font-bold t-strong placeholder:t-faint outline-none focus-acc" />
                 <button type="button" onClick={doVariations} disabled={refineLoading}
-                        className="rounded-xl bg-[linear-gradient(135deg,#FF9F68,#FF6B81)] px-6 py-3 font-bold text-white shadow-[0_4px_20px_rgba(255,159,104,0.3)] transition active:scale-95 hover:opacity-90 disabled:opacity-60">
+                        className="rounded-xl acc-grad3 px-6 py-3 font-bold text-white acc-shadow transition active:scale-95 hover:opacity-90 disabled:opacity-60">
                   {refineLoading ? "…" : t.make}
                 </button>
               </div>
@@ -444,7 +439,7 @@ export default function Home() {
               <div>
                 <div className="flex flex-wrap items-center gap-2 rounded-xl border t-brd t-glass2 p-3">
                   {combineNums.map((n) => (
-                    <span key={n} className="flex items-center gap-1 rounded-lg bg-[#FF4D6D]/40 px-2 py-1 text-sm text-white">
+                    <span key={n} className="flex items-center gap-1 rounded-lg acc-chip px-2 py-1 text-sm text-white">
                       #{n}
                       <button type="button" onClick={() => setCombineNums((p) => p.filter((x) => x !== n))} className="t-soft hover:t-strong">×</button>
                     </span>
@@ -456,14 +451,14 @@ export default function Home() {
                          className="w-20 bg-transparent text-sm t-strong outline-none placeholder:t-faint" />
                 </div>
                 <button type="button" onClick={doCombine} disabled={refineLoading}
-                        className="mt-3 w-full rounded-xl bg-[linear-gradient(135deg,#FF4D6D,#FF7A5C)] py-3 font-bold text-white transition active:scale-95 hover:opacity-90 disabled:opacity-60">
+                        className="mt-3 w-full rounded-xl acc-grad4 py-3 font-bold text-white transition active:scale-95 hover:opacity-90 disabled:opacity-60">
                   {refineLoading ? "…" : t.combineBtn}
                 </button>
               </div>
             )}
 
             <input value={refineDesc} onChange={(e) => setRefineDesc(e.target.value)} placeholder={t.refineDescPlaceholder}
-                   className="mt-3 w-full rounded-xl border t-brd t-glass2 px-4 py-2.5 text-sm t-strong placeholder:t-faint outline-none focus:ring-2 focus:ring-[#FF9F68]/40" />
+                   className="mt-3 w-full rounded-xl border t-brd t-glass2 px-4 py-2.5 text-sm t-strong placeholder:t-faint outline-none focus-acc" />
 
             {refineError && <p className="mt-3 rounded-lg bg-rose-500/15 px-3 py-2 text-center text-sm text-rose-300">{refineError}</p>}
           </div>
@@ -477,7 +472,7 @@ export default function Home() {
         {navOpen && (
           <div id="fab-nav" className={`absolute bottom-0 max-h-[70vh] w-64 overflow-y-auto rounded-2xl border border-[#ffffff1f] bg-[#14141F]/95 p-2 shadow-[0_12px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl ${lang === "en" ? "left-full ml-3 text-left" : "right-full mr-3 text-right"}`}>
             <button type="button" onClick={() => scrollTo("top")}
-                    className="mb-1 w-full rounded-xl bg-[linear-gradient(135deg,#FF6B81,#FF9F68)] px-3 py-2.5 text-sm font-bold text-white transition hover:opacity-90">
+                    className="mb-1 w-full rounded-xl acc-grad px-3 py-2.5 text-sm font-bold text-white transition hover:opacity-90">
               {t.navFromStart}
             </button>
             <button type="button" onClick={() => scrollTo("suggested")}
@@ -495,7 +490,7 @@ export default function Home() {
                   </button>
                 ))}
                 <button type="button" onClick={() => scrollTo("refine")}
-                        className="mt-1 w-full rounded-lg border border-[#ffffff1a] px-3 py-2 text-xs font-bold text-[#FFCBB0] transition hover:bg-[#ffffff14]">
+                        className="mt-1 w-full rounded-lg border border-[#ffffff1a] px-3 py-2 text-xs font-bold text-acc2 transition hover:bg-[#ffffff14]">
                   {t.navRefine}
                 </button>
               </>
@@ -533,17 +528,17 @@ export default function Home() {
             <circle cx="12" cy="12" r="9" />
             <path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9S14.5 21.5 12 21c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z" />
           </svg>
-          <span key={lang} className="relative bg-[linear-gradient(135deg,#FF6B81,#FF9F68,#FFC46B)] bg-clip-text text-base font-black text-transparent animate-[flipIn_.4s_ease] [transform-style:preserve-3d]">
+          <span key={lang} className="relative brand-grad bg-clip-text text-base font-black text-transparent animate-[flipIn_.4s_ease] [transform-style:preserve-3d]">
             {lang === "fa" ? "EN" : "فا"}
           </span>
         </button>
 
         {/* CTA — همیشه نمایان، با فاویکون و بوردر رنگیِ چرخان */}
         <div className="relative h-14 w-14">
-          <div className="pointer-events-none absolute -inset-[3px] rounded-full bg-[conic-gradient(from_0deg,#FF4D6D,#FF7A5C,#FF9F68,#FFC46B,#FF7AA8,#FF4D6D)] animate-[spin360_4s_linear_infinite]" />
-          {!navOpen && <div className="pointer-events-none absolute -inset-1 rounded-full bg-[#FF7A8A]/45 blur-xl animate-[haloPulse_2s_ease-in-out_infinite]" />}
+          <div className="pointer-events-none absolute -inset-[3px] rounded-full acc-conic animate-[spin360_4s_linear_infinite]" />
+          {!navOpen && <div className="acc-halo pointer-events-none absolute -inset-1 rounded-full blur-xl animate-[haloPulse_2s_ease-in-out_infinite]" />}
           <button type="button" onClick={() => setNavOpen((o) => !o)} aria-label="menu" aria-expanded={navOpen} aria-controls="fab-nav"
-                  className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#14141F] shadow-[0_8px_30px_rgba(255,77,109,0.45)] transition hover:scale-105 hover:shadow-[0_10px_36px_rgba(255,77,109,0.6)] active:scale-95">
+                  className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#14141F] acc-shadow-lg transition hover:scale-105 hover:brightness-110 active:scale-95">
             {navOpen ? (
               <span className="text-2xl text-white">✕</span>
             ) : (
@@ -563,7 +558,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
           <div>
             <span className="text-xl font-black tracking-tight t-strong">
-              {t.brandDot}<span className="text-[#FF7A8A]">.</span>
+              {t.brandDot}<span className="text-acc">.</span>
             </span>
             <p className="mt-1 text-xs t-soft">
               <span dir="ltr">© {new Date().getFullYear()}</span> {t.rights}
@@ -572,7 +567,7 @@ export default function Home() {
           <p className="text-sm t-soft">
             {t.footerCredit}{" "}
             <a href="https://yaldajahanshahi.ir" target="_blank" rel="noopener noreferrer"
-               className="font-bold t-soft underline underline-offset-2 transition-colors hover:text-[#FF7A8A]">
+               className="link-acc font-bold t-soft underline underline-offset-2">
               YJ19
             </a>
           </p>

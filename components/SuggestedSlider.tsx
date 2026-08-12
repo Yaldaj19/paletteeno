@@ -43,15 +43,15 @@ export default function SuggestedSlider({ lang }: { lang: Lang }) {
       {/* عنوانِ تزئین‌شده — ستاره‌های درخشان + خطوطِ محوشونده در دو طرف */}
       <div className="mb-8 flex items-center justify-center gap-3 px-4" dir={t.dir}>
         <span aria-hidden className="hidden h-px w-16 bg-[linear-gradient(to_right,transparent,var(--fg-faint))] sm:block md:w-28" />
-        <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-[#FF6B81] animate-[twinkle_3s_ease-in-out_infinite]" fill="currentColor">
+        <svg aria-hidden viewBox="0 0 24 24" className="text-acc h-5 w-5 shrink-0 animate-[twinkle_3s_ease-in-out_infinite]" fill="currentColor">
           <path d="M12 2l1.6 6.4L20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6z" />
         </svg>
         <h2 className="font-brand text-center text-3xl tracking-tight md:text-4xl">
-          <span className="bg-[linear-gradient(120deg,#FF8FA3,#FF9F68,#FFC46B,#FF7AA8)] bg-[length:200%_auto] bg-clip-text text-transparent animate-[gradientShift_6s_ease_infinite]">
+          <span className="brand-grad bg-[length:200%_auto] bg-clip-text text-transparent animate-[gradientShift_6s_ease_infinite]">
             {t.suggestedTitle}
           </span>
         </h2>
-        <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-[#FF9F68] animate-[twinkle_3s_ease-in-out_1.5s_infinite]" fill="currentColor">
+        <svg aria-hidden viewBox="0 0 24 24" className="text-acc2 h-5 w-5 shrink-0 animate-[twinkle_3s_ease-in-out_1.5s_infinite]" fill="currentColor">
           <path d="M12 2l1.6 6.4L20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6z" />
         </svg>
         <span aria-hidden className="hidden h-px w-16 bg-[linear-gradient(to_left,transparent,var(--fg-faint))] sm:block md:w-28" />
