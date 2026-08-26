@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import type { RenderPalette } from "@/lib/colors";
+import { normalizeAll } from "@/lib/colors";
+import { decodeSharedPalette } from "@/lib/share";
 import PaletteCard from "@/components/PaletteCard";
 import { TOPICS, sampleFor, labelFor } from "@/lib/topics";
 import { getDict, type Lang } from "@/lib/i18n";
@@ -20,6 +22,7 @@ type TitleSpec =
   | { kind: "topic"; keys: string[] }
   | { kind: "desc" }
   | { kind: "new" }
+  | { kind: "shared" }
   | { kind: "variations"; n: number }
   | { kind: "combine"; nums: number[] };
 
@@ -56,6 +59,7 @@ export default function Home() {
   const [batches, setBatches] = useState<Batch[]>([]);
   const [batchSeq, setBatchSeq] = useState(0);
   const [navOpen, setNavOpen] = useState(false);
+  const [toast, setToast] = useState("");
 
   // بازآفرینی / ترکیب
   const [refineMode, setRefineMode] = useState<"new" | "variations" | "combine">("new");
@@ -90,8 +94,35 @@ export default function Home() {
     return () => window.removeEventListener("keydown", onKey);
   }, [navOpen]);
 
+  // اگر لینکِ اشتراکی باز شده باشد (?p=...)، همان پالت را به‌صورت یک بخش نشان بده.
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("p");
+    if (!code) return;
+    const core = decodeSharedPalette(code);
+    if (!core) return;
+    setBatches([{ id: 1, titleSpec: { kind: "shared" }, kind: "palette", engine: "shared", palettes: normalizeAll([core], 0), startNumber: 0, topicKeys: [] }]);
+    setBatchSeq(1);
+  }, []);
+
+  // پس از ساختِ هر بخشِ جدید: هدایت به بخشِ پالت‌ها + اعلانِ کوتاه (تا کاربر بداند ساخته شد).
+  useEffect(() => {
+    if (batchSeq === 0) return;
+    const el = document.getElementById("results");
+    if (el) {
+      const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    }
+    setToast(getDict(lang).createdToast);
+    const id = window.setTimeout(() => setToast(""), 2600);
+    return () => window.clearTimeout(id);
+    // فقط با تغییرِ batchSeq اجرا شود؛ افزودنِ lang باعثِ اسکرولِ دوباره هنگام تغییرِ زبان می‌شود.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [batchSeq]);
+
   const flat = useMemo(() => batches.flatMap((b) => b.palettes), [batches]);
   const total = flat.length;
+  // نمایش: جدیدترین بخش در ردیفِ اول؛ شماره‌گذاری (startNumber) بر پایه‌ی ترتیبِ ساخت ثابت می‌ماند.
+  const orderedBatches = useMemo(() => [...batches].reverse(), [batches]);
   const topicLabels = useMemo(
     () => topicKeys.map((k) => { const tt = TOPICS.find((x) => x.key === k); return tt ? labelFor(tt, lang) : ""; }).filter(Boolean).join("، "),
     [topicKeys, lang]
@@ -105,6 +136,7 @@ export default function Home() {
       case "topic": return t.titleTopic(spec.keys.map((k) => { const tt = TOPICS.find((x) => x.key === k); return tt ? labelFor(tt, lang) : ""; }).filter(Boolean).join(sep));
       case "desc": return t.titleByDesc;
       case "new": return t.titleNew;
+      case "shared": return t.titleShared;
       case "variations": return t.titleVariations(spec.n);
       case "combine": return t.titleCombine(spec.nums.map((n) => "#" + n).join(sep));
     }
@@ -230,6 +262,15 @@ export default function Home() {
 
   return (
     <div dir={t.dir}>
+      {/* ===== اعلانِ ساختِ پالت‌ها (aria-live برای screen reader) ===== */}
+      <div aria-live="polite" className="pointer-events-none fixed inset-x-0 top-4 z-[60] flex justify-center px-4">
+        {toast && (
+          <div className="pointer-events-auto rounded-full acc-grad px-5 py-2 text-sm font-bold text-white acc-shadow animate-[rise_.4s_cubic-bezier(.22,1,.36,1)]">
+            {toast}
+          </div>
+        )}
+      </div>
+
       {/* ===== لایه‌ی اورورای سراسری و ثابت — پشتِ همه‌ی بخش‌ها تا صفحه یک‌پارچه دیده شود ===== */}
       <div className="aurora-field pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="blob1 absolute -top-40 -right-24 h-[620px] w-[620px] blur-[90px] animate-[aurora1_14s_ease-in-out_infinite_alternate]" />
@@ -365,8 +406,8 @@ export default function Home() {
 
       {/* ===================== نتایج (تاریخچه) ===================== */}
       {batches.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 pb-4 pt-10">
-          {batches.map((b) => {
+        <section id="results" className="mx-auto max-w-7xl scroll-mt-4 px-4 pb-4 pt-10">
+          {orderedBatches.map((b) => {
             const bSamples = samplesFor(b.topicKeys);
             return (
             <div key={b.id} id={`batch-${b.id}`} className="mb-12 scroll-mt-6">
@@ -482,7 +523,7 @@ export default function Home() {
             {batches.length > 0 && (
               <>
                 <div className="my-1 px-2 text-[11px] text-white opacity-40">{t.navSections}</div>
-                {batches.map((b) => (
+                {orderedBatches.map((b) => (
                   <button key={b.id} type="button" onClick={() => scrollTo(`batch-${b.id}`)}
                           className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-xs text-white opacity-70 transition hover:bg-[#ffffff14] hover:opacity-100">
                     <span className="truncate">{titleText(b.titleSpec)}</span>

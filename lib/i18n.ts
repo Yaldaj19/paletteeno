@@ -65,6 +65,10 @@ export interface Dict {
   tagLight: string;
   tagDark: string;
   copied: string;
+  share: string;
+  shareCopied: string;
+  createdToast: string;
+  titleShared: string;
   // با آرگومان
   varPlaceholder: (total: number) => string;
   errRange: (total: number) => string;
@@ -90,7 +94,7 @@ const fa: Dict = {
   tabSolid: "رنگ ساده",
   tabGradient: "گرادینت",
   angleLabel: "زاویه‌ی گرادینت",
-  namePlaceholder: "مثلاً: بنفش سلطنتی، آبی نفتی، #7C3AED…",
+  namePlaceholder: "مثلاً: بنفش سلطنتی — یا چند رنگ: «بنفش و طلایی و آبی»",
   pickBaseHint: "رنگ پایه را انتخاب کن",
   suggestions: ["سبز لوکس", "آبی نفتی", "بنفش سلطنتی", "زمردی", "نارنجی گرم", "طلایی", "سرمه‌ای", "صورتی مدرن", "موکا موس", "کورال", "نعنایی", "ایندیگو", "هلویی", "خردلی", "سایان", "روبی"],
   guide: "رنگ موردنظرت را می‌دانی؟ همین بالا انتخاب یا وارد کن. اگر نمی‌دانی، در «توضیحات» بنویس یا از پایین «موضوع / کاربرد» را انتخاب کن تا خودمان رنگِ متناسب پیشنهاد بدهیم.",
@@ -143,6 +147,10 @@ const fa: Dict = {
   tagLight: "روشن",
   tagDark: "دارک",
   copied: "کپی شد ✓",
+  share: "اشتراک‌گذاری",
+  shareCopied: "لینک کپی شد ✓",
+  createdToast: "پالت‌ها ساخته شد ✓",
+  titleShared: "پالتِ اشتراک‌گذاری‌شده",
   varPlaceholder: (t) => `شماره پالت (۱ تا ${t})`,
   errRange: (t) => `یک شماره بین ۱ تا ${t} وارد کن.`,
   errCombine: "حداقل دو شماره پالت برای ترکیب انتخاب کن.",
@@ -167,7 +175,7 @@ const en: Dict = {
   tabSolid: "Solid",
   tabGradient: "Gradient",
   angleLabel: "Gradient angle",
-  namePlaceholder: "e.g. Royal purple, Petrol blue, #7C3AED…",
+  namePlaceholder: "e.g. Royal purple — or several: “purple and gold and blue”",
   pickBaseHint: "Pick a base color",
   suggestions: ["Luxe green", "Petrol blue", "Royal purple", "Emerald", "Warm orange", "Gold", "Navy", "Modern pink", "Mocha mousse", "Coral", "Mint", "Indigo", "Peach", "Mustard", "Cyan", "Ruby"],
   guide: "Know the color you want? Pick or type it above. If not, describe it in “Description” or choose a “Topic / use case” below and we’ll suggest a matching color.",
@@ -220,6 +228,10 @@ const en: Dict = {
   tagLight: "Light",
   tagDark: "Dark",
   copied: "Copied ✓",
+  share: "Share",
+  shareCopied: "Link copied ✓",
+  createdToast: "Palettes generated ✓",
+  titleShared: "Shared palette",
   varPlaceholder: (t) => `Palette number (1 to ${t})`,
   errRange: (t) => `Enter a number between 1 and ${t}.`,
   errCombine: "Pick at least two palette numbers to combine.",

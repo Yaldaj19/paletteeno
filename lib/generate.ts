@@ -87,6 +87,36 @@ export function combineFrom(seeds: { primary: string; accent: string }[]): CoreP
   ];
 }
 
+/** چندرنگ: وقتی کاربر ۲ یا ۳ رنگ می‌دهد، دقیقاً از همان رنگ‌ها ۶ پالت می‌سازد
+ *  (هر رنگِ کاربر به‌عنوان برند، و رنگِ بعدیِ خودش به‌عنوان اکسنت) — بدون جایگزینیِ خودسرانه. */
+export function multiColorPalettes(inputs: string[]): CorePalette[] {
+  const cols = inputs.filter(Boolean);
+  while (cols.length < 2) cols.push(cols[0] || "#4F46E5");
+  const n = cols.length;
+  const at = (i: number) => cols[((i % n) + n) % n];
+  const primaryTone = (hex: string, dL = 0, dS = 0) => {
+    const b = hexToHsl(toBrandTone(hex));
+    return hslToHex({ h: b.h, s: clamp(b.s + dS, 24, 92), l: clamp(b.l + dL, 24, 66) });
+  };
+
+  const out: CorePalette[] = [];
+  for (let i = 0; i < 3; i++) {
+    out.push(core(
+      L(`رنگ‌های تو ${i + 1}`, `Your colors ${i + 1}`),
+      L("دقیقاً از رنگ‌هایی که دادی — برند + اکسنت", "Exactly the colors you gave — brand + accent"),
+      "multi", primaryTone(at(i), 2), toBrandTone(at(i + 1)), false,
+    ));
+  }
+  for (let i = 0; i < 3; i++) {
+    out.push(core(
+      L(`رنگ‌های تو — دارک ${i + 1}`, `Your colors — dark ${i + 1}`),
+      L("نسخه‌ی دارک از همان رنگ‌ها", "Dark version of the same colors"),
+      "multi", primaryTone(at(i), -6, 4), toBrandTone(at(i + 1)), true,
+    ));
+  }
+  return out;
+}
+
 /** پیشنهاد خودکار: از چند رنگِ متناسب با موضوع، ۶ پالت (۳ روشن + ۳ دارک) با رنگ‌های متفاوت.
  *  هر بار فراخوانی، با jitterِ تصادفیِ Hue/روشنایی، خروجی متفاوتی می‌دهد (تکرار شبیه قبلی نشود). */
 export function topicPalettes(bases: string[]): CorePalette[] {

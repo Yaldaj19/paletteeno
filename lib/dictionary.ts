@@ -97,6 +97,24 @@ export function parseColorInput(raw: string): ParsedInput {
   return result;
 }
 
+/** چند رنگ را از یک ورودی جدا می‌کند (مثلاً «بنفش و طلایی و آبی» یا «#7C3AED, #F59E0B»).
+ *  فقط رنگ‌هایی که واقعاً تطبیق می‌خورند برمی‌گردند؛ حداکثر ۳ رنگِ یکتا. */
+export function parseMultiColors(raw: string): string[] {
+  const parts = (raw || "")
+    .split(/\s+و\s+|\s+and\s+|[،,+/]/i)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (parts.length < 2) return [];
+  const bases: string[] = [];
+  for (const part of parts) {
+    const parsed = parseColorInput(part);
+    if (!parsed.matched) continue;
+    const b = parsed.base.toUpperCase();
+    if (!bases.includes(b)) bases.push(b);
+  }
+  return bases.slice(0, 3);
+}
+
 // نرمال‌سازی مقدار روشنایی رنگ پایه به یک تُنِ میانیِ مناسب برند (نه خیلی روشن/تیره)
 export function toBrandTone(hex: string): string {
   const h = hexToHsl(hex);

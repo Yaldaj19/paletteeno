@@ -3,17 +3,27 @@ import { useState } from "react";
 import type { RenderPalette } from "@/lib/colors";
 import { DEFAULT_SAMPLE, DEFAULT_SAMPLE_EN, type TopicSample } from "@/lib/topics";
 import { getDict, type Lang } from "@/lib/i18n";
+import { shareUrlFor } from "@/lib/share";
 
 export default function PaletteCard({ p, number, sample, lang = "fa" }: { p: RenderPalette; number: number; sample?: TopicSample; lang?: Lang }) {
   const r = p.render;
   const t = getDict(lang);
   const sm = sample ?? (lang === "en" ? DEFAULT_SAMPLE_EN : DEFAULT_SAMPLE);
   const [copied, setCopied] = useState<string | null>(null);
+  const [shared, setShared] = useState(false);
 
   const copy = (hex: string) => {
     navigator.clipboard?.writeText(hex).then(() => {
       setCopied(hex);
       setTimeout(() => setCopied((c) => (c === hex ? null : c)), 1200);
+    });
+  };
+
+  const share = () => {
+    const url = shareUrlFor(p);
+    navigator.clipboard?.writeText(url).then(() => {
+      setShared(true);
+      setTimeout(() => setShared(false), 1600);
     });
   };
 
@@ -37,7 +47,23 @@ export default function PaletteCard({ p, number, sample, lang = "fa" }: { p: Ren
         <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${badgeCls}`}>
           {p.dark ? t.tagDark : t.tagLight}
         </span>
-        <span className={`text-sm font-black ${frameText}`} dir="ltr">#{number}</span>
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={share} title={t.share} aria-label={t.share}
+                  className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold transition ${badgeCls} hover:opacity-80`}>
+            {shared ? (
+              <span>{t.shareCopied}</span>
+            ) : (
+              <>
+                <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+                  <path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" />
+                </svg>
+                <span>{t.share}</span>
+              </>
+            )}
+          </button>
+          <span className={`text-sm font-black ${frameText}`} dir="ltr">#{number}</span>
+        </div>
       </div>
 
       {/* بلوکِ پیش‌نمایش (داخل قاب) */}
